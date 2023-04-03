@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Screen Share Client</title>
+  <style>
+    #video {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Screen Share Client</h1>
+  <button onclick="toggleVideo()">Toggle Video</button>
+  <video id="video" autoplay></video>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const video = document.querySelector('#video');
+    let pc = null;
+
+    socket.on('offer', async (offer) => {
+      pc = new RTCPeerConnection();
+
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('candidate', event.candidate);
+        }
+      };
+
+      pc.ontrack = (event) => {
+        video.srcObject = event.streams[0];
+      };
+
+      await pc.setRemoteDescription(offer);
+
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      socket.emit('answer', answer);
+    });
+
+    socket.on('candidate', async (candidate) => {
+      await pc.addIceCandidate(candidate);
+    });
+
+    function toggleVideo() {
+      video.style.display = (video.style.display == 'none' ? 'block' : 'none');
+    }
+  </script>
+</body>
+</html>
