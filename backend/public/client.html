@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Screen Share Client</title>
+</head>
+<body>
+  <h1>Screen Share Client</h1>
+  <button id="start">Start Receive</button>
+  <button id="capture">Capture</button>
+  <video id="video" autoplay></video>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const video = document.querySelector('#video');
+    const startButton = document.querySelector('#start');
+    const captureButton = document.querySelector('#capture');
+    let pc = null;
+
+    async function startReceive() {
+      pc = new RTCPeerConnection();
+      pc.addTransceiver("video", { direction: "recvonly" });
+
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          event.candidate.usernameFragment = null;
+          socket.emit('candidate', event.candidate);
+        }
+      };
+
+      pc.ontrack = (event) => {
+        video.srcObject = event.streams[0];       
+      };
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);   
+      socket.emit('offer', offer);      
+    }
+
+    socket.on('answer', async (answer) => {
+      console.log(answer);
+      await pc.setRemoteDescription(answer);
+    });
+
+    socket.on('candidate', async (candidate) => {     
+      await pc.addIceCandidate(candidate);
+    });
+    
+    function capture() {
+			var canvas = document.createElement("canvas");
+			canvas.width = video.videoWidth;
+			canvas.height = video.videoHeight;
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+			var link = document.createElement('a');
+			link.download = 'capture.png';
+			link.href = canvas.toDataURL("image/png");
+			link.click();
+		}
+
+    startButton.addEventListener('click', startReceive);
+    captureButton.addEventListener('click', capture);
+  </script>
+</body>
+</html>

@@ -1,16 +1,7 @@
-const fs = require('fs');
-const https = require('https');
 const express = require('express');
 const app = express();
-
-const options = {
-  key: fs.readFileSync('file.pem'),
-  cert: fs.readFileSync('file.crt')
-};
-
-const server = https.createServer(options, app);
-
-const io = require('socket.io')(server, {
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
   cors: {
     origin: '*'
   }
@@ -18,7 +9,7 @@ const io = require('socket.io')(server, {
 
 app.use(express.static('public'));
 
-app.get('/server', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
@@ -42,6 +33,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3000, () => {
+http.listen(3000, () => {
   console.log('listening on *:3000');
 });
