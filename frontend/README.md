@@ -1,6 +1,6 @@
 # ScreenShare
 
-Frontend for ScreenShare project. Built with React.
+Frontend da aplicação ScreenShare. Desenvolvido com ReactJS.
 
 ## Como rodar o projeto
 
