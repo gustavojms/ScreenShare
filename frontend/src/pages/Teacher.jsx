@@ -1,5 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import '../index.css'
+import { MdCallEnd } from 'react-icons/md'
+import { BiCamera } from 'react-icons/bi'
+import { IoMdArrowDropleft } from 'react-icons/io';
+import { FaExpand } from 'react-icons/fa';
+import { AiFillHome } from 'react-icons/ai';
+import { BsCameraVideo } from 'react-icons/bs';
+import { FaComment } from 'react-icons/fa';
 
 const Teacher = () => {
     const videoRef = useRef(null);
