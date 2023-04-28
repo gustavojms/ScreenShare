@@ -46,7 +46,6 @@ const Student = () => {
       await pc.current.setLocalDescription(offer);
       socket.current.emit('offer', offer);
     };
-  };
 
   useEffect(() => {
     socket.current = io("http://localhost:3000");
