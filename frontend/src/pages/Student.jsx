@@ -8,6 +8,8 @@ import { FaExpand } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { BsCameraVideo } from 'react-icons/bs';
 import { FaComment } from 'react-icons/fa';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Student = () => {
   const videoRef = useRef(null);
@@ -73,14 +75,14 @@ const Student = () => {
   return (
     <body className="flex">
       <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
-        <button class=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+        <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
           <AiFillHome size={30}/>
         </button>
-        <button class="m-2  text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+        <button className="m-2  text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
           <BsCameraVideo size={30}/>
         </button>
-        <button class="m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-          <FaComment size={30}/>
+        <button className="text-3xl m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+          <FontAwesomeIcon icon={faCommentDots}/>
         </button>
       </div>
       <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
@@ -93,7 +95,7 @@ const Student = () => {
         <div className="flex justify-end mr-14">
           <button onClick={startReceive} className="bg-gray-200 hover:bg-gray-300 p-2 text-blue-400 font-semibold rounded-lg">Start Receive</button>
         </div>
-        <div class="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-screen">
           <video ref={videoRef} autoPlay>
           </video>
         </div>
@@ -109,7 +111,7 @@ const Student = () => {
           </button>
         </div>
       </div>
-      <div class="bg-gray-200 pr-72">chat</div>
+      <div className="bg-gray-200 pr-72">chat</div>
     </body>
   );
 };
