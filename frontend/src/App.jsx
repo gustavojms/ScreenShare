@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Teacher from './pages/Teacher'
 import Student from './pages/Student'
+import './index.css'
 
 function App() {
   return (
