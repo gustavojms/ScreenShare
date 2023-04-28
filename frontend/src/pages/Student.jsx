@@ -5,6 +5,18 @@ const Student = () => {
     const videoRef = useRef(null);
     const socket = useRef(null);
     const pc = useRef(null);
+
+    function takeScreenShot() {
+      let canva = document.createElement("canvas");
+      canva.width = videoRef.current.videoWidth;
+      canva.height = videoRef.current.videoHeight;
+      let ctx = canva.getContext("2d");
+      ctx.drawImage(videoRef.current, 0, 0, canva.width, canva.height);
+      let link = document.createElement('a');
+      link.download = 'screenshot.png';
+      link.href = canva.toDataURL("image/png");
+      link.click();
+    }
   
     const startReceive = async () => {
       pc.current = new RTCPeerConnection();
@@ -54,7 +66,7 @@ const Student = () => {
       <>
         <h1>Student</h1>
         <button onClick={startReceive}>Start Receive</button>
-        <button>Capture</button>
+        <button onClick={ takeScreenShot }>Capture</button>
         <video ref={videoRef} autoPlay></video>
       </>
     );
