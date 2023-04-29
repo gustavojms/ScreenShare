@@ -1,5 +1,5 @@
 {
-  "name": "funciona-por-favor",
+  "name": "ScreenShare",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -9,9 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.13.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1"
+  },
+  "devDependencies": {
+    "prisma": "^4.13.0"
   }
 }
