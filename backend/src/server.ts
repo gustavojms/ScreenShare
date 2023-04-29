@@ -1,5 +1,8 @@
-const http = require('http').createServer();
-const io = require('socket.io')(http, {
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+
+const http = createServer();
+const io = new Server(http, {
   cors: {
     origin: '*'
   }
@@ -8,15 +11,15 @@ const io = require('socket.io')(http, {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('offer', (offer) => {
+  socket.on('offer', (offer: any) => {
     socket.broadcast.emit('offer', offer);
   });
 
-  socket.on('answer', (answer) => {
+  socket.on('answer', (answer: any) => {
     socket.broadcast.emit('answer', answer);
   });
 
-  socket.on('candidate', (candidate) => {
+  socket.on('candidate', (candidate: any) => {
     socket.broadcast.emit('candidate', candidate);
   });
 });
