@@ -7,20 +7,26 @@ const io = new Server(http, {
     origin: '*'
   }
 });
+let ids: string[] = [];
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  
+  console.log('user connected id: '+socket.id);
+  ids.push(socket.id); 
+  io.emit('ids', ids);
 
-  socket.on('offer', (offer: any) => {
-    socket.broadcast.emit('offer', offer);
+  socket.on('frame', (frame:any) => {
+    // ids.forEach(id => {
+    //   io.to(id).emit('frame', frame);
+    // });
+    socket.broadcast.emit('frame', frame);
   });
 
-  socket.on('answer', (answer: any) => {
-    socket.broadcast.emit('answer', answer);
-  });
-
-  socket.on('candidate', (candidate: any) => {
-    socket.broadcast.emit('candidate', candidate);
+  socket.on('disconnect', function () {
+    let index = ids.indexOf(socket.id);
+    ids.splice(index, 1);
+    io.emit('ids', ids);
+    console.log('user disconnected id: '+socket.id);
   });
 });
 
