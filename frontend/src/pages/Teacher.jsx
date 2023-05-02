@@ -15,6 +15,7 @@ const Teacher = () => {
   const videoRef = useRef(null);
   const socket = useRef(null);
   let stream = null;
+  let worker = useRef(null);
 
   useEffect(() => {
     socket.current = io("http://localhost:3000");
@@ -39,6 +40,11 @@ const Teacher = () => {
     canvas.height = 600;
     const context = canvas.getContext('2d', { willReadFrequently: true });
 
+    worker.current = new Worker('worker.js');
+    worker.current.onmessage = () => {
+      captureAndSendFrame();
+    };
+
     function captureAndSendFrame() {
       context.drawImage(
         videoRef.current,
@@ -49,9 +55,7 @@ const Teacher = () => {
       );
       const imageDataURL = canvas.toDataURL('image/webp', 0.8);
       socket.current.emit('frame', imageDataURL);
-      setTimeout(captureAndSendFrame, 10);
     }
-    captureAndSendFrame();
   }
 
   function stopScreenShare() {
