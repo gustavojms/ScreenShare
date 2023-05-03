@@ -1,7 +1,7 @@
 import { Role } from "@prisma/client";
 
 export interface CreateUserData {
-    name: string;
+    userName: string;
     email: string;
     password: string;
     role: Role;
