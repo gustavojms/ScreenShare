@@ -1,6 +1,9 @@
+import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { userRouter } from './routes/routes';
 
+export const app = express();
 const http = createServer();
 const io = new Server(http, {
   cors: {
@@ -8,6 +11,9 @@ const io = new Server(http, {
   }
 });
 let ids: string[] = [];
+
+app.use(express.json());
+app.use("/user", userRouter)
 
 io.on('connection', (socket) => {
   
@@ -30,6 +36,6 @@ io.on('connection', (socket) => {
   });
 });
 
-http.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+})
