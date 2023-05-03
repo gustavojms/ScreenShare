@@ -8,7 +8,7 @@ export interface CreateUserRequest {
     role: Role;
 }
 
-export class CreateUser {
+export class CreateUserService {
     constructor(
         private userRepository: UserRepository
     ) {}
