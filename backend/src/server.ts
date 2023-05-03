@@ -1,15 +1,18 @@
 import express from 'express';
-import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { userRouter } from './routes/routes';
 
-export const app = express();
-const http = createServer();
-const io = new Server(http, {
+const app = express();
+const server = app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+
+const io = new Server(server, {
   cors: {
     origin: '*'
   }
 });
+
 let ids: string[] = [];
 
 app.use(express.json());
@@ -35,7 +38,3 @@ io.on('connection', (socket) => {
     console.log('user disconnected id: '+socket.id);
   });
 });
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-})
