@@ -1,6 +1,6 @@
 import express from 'express';
 import { Server } from 'socket.io';
-import { userRouter } from './routes/routes';
+import { userRouter, screenshotRouter } from './routes/routes';
 
 const app = express();
 const server = app.listen(3000, () => {
@@ -17,6 +17,7 @@ let ids: string[] = [];
 
 app.use(express.json());
 app.use("/user", userRouter)
+app.use("/screenshot",screenshotRouter)
 
 io.on('connection', (socket) => {
   
