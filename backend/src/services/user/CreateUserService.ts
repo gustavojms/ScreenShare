@@ -14,13 +14,19 @@ export class CreateUserService {
     ) {}
 
     async execute(data: CreateUserRequest) {
-        const user = await this.userRepository.create({
+        const user = await this.userRepository.findByEmail(data.email);
+
+        if (user) {
+            throw new Error("User already exists");
+        }
+
+        const userCreated = await this.userRepository.create({
             userName: data.userName,
             email: data.email,
             password: data.password,
             role: data.role,
         });
 
-        return user;
+        return userCreated;
     }
 }
