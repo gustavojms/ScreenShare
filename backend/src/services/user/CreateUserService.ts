@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { UserRepository, CreateUserData } from "../../repositories/user/IUserRepository";
+import { UserRepository } from "../../repositories/user/IUserRepository";
 
 export interface CreateUserRequest {
     userName: string;

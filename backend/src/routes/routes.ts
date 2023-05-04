@@ -5,3 +5,4 @@ export const userRouter = Router();
 const userController = new UserController();
 
 userRouter.post("/", userController.create);
+userRouter.delete("/:id", userController.delete);
