@@ -12,79 +12,57 @@ import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Teacher = () => {
-    const videoRef = useRef(null);
-    const socket = useRef(null);
-    let stream = useRef(null);
-    let pc = useRef(null);
-  
-    useEffect(() => {
-      socket.current = io("http://localhost:3000");
-  
-      socket.current.on('offer', async (offer) => {
-        pc.current = new RTCPeerConnection();
-        stream.current.getTracks().forEach(track => pc.current.addTrack(track, stream.current));
-  
-        pc.current.onicecandidate = event => {
-          if (event.candidate) {
-            event.candidate.usernameFragment = null;
-            console.log("candidate");
-            socket.current.emit('candidate', event.candidate);
-          }
-        };
-  
-        await pc.current.setRemoteDescription(offer);
-        const answer = await pc.current.createAnswer();
-        await pc.current.setLocalDescription(answer);
-        socket.current.emit('answer', answer);
-        console.log(offer);
-      });
-  
-      socket.current.on('candidate', async (candidate) => {
-        console.log("candidate");
-        await pc.current.addIceCandidate(candidate);
-      });
-  
-      return () => {
-        if (pc.current) {
-          pc.current.close();
-          pc.current = null;
-        }
-  
-        if (stream.current) {
-          stream.current.getTracks().forEach(track => track.stop());
-          stream.current = null;
-        }
-  
-        if (socket.current) {
-          socket.current.close();
-          socket.current = null;
-        }
-      };
-    }, []);
-  
-    const startScreenShare = async () => {
-      stream.current = await navigator.mediaDevices.getDisplayMedia({
-        video: {
-          width: { max: 720 },
-          height: { max: 480 }
-        }
-      });
-      videoRef.current.srcObject = stream.current;
+  const videoRef = useRef(null);
+  const socket = useRef(null);
+  let stream = null;
+  let worker = useRef(null);
+
+  useEffect(() => {
+    socket.current = io("http://localhost:3000");
+
+    return () => {
+      socket.current.off('frame');
     };
-  
-    const stopScreenShare = () => {
-      if (pc.current) {
-        pc.current.close();
-        pc.current = null;
-      }
-  
-      if (stream.current) {
-        stream.current.getTracks().forEach(track => track.stop());
-        stream.current = null;
-      }
-  
-      videoRef.current.srcObject = null;
+  }, []);
+
+  async function startScreenShare() {
+    stream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        width: { max: 1024 },
+        height: { max: 768 },
+      },
+    });
+
+    videoRef.current.srcObject = stream;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 600;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+
+    worker.current = new Worker('worker.js');
+    worker.current.onmessage = () => {
+      captureAndSendFrame();
     };
+
+    function captureAndSendFrame() {
+      context.drawImage(
+        videoRef.current,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      const imageDataURL = canvas.toDataURL('image/webp', 0.8);
+      socket.current.emit('frame', imageDataURL);
+    }
+  }
+
+  function stopScreenShare() {
+    videoRef.current.srcObject = null;
+    stream.getTracks().forEach((track) => track.stop());
+    stream = null;
+  }
   
     return (
         <>
