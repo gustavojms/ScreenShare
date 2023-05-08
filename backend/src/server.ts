@@ -2,7 +2,12 @@ import express from 'express';
 import { Server } from 'socket.io';
 import { userRouter } from './routes/routes';
 
+
+
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
 const server = app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
