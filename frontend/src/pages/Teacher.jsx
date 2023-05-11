@@ -54,7 +54,7 @@ const Teacher = () => {
         canvas.height
       );
       const imageDataURL = canvas.toDataURL('image/webp', 0.8);
-      socket.current.emit('frame', imageDataURL);
+      socket.current.volatile.emit('frame', imageDataURL);
     }
   }
 
