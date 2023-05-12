@@ -28,16 +28,16 @@ const Teacher = () => {
   async function startScreenShare() {
     stream = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        width: { max: 1024 },
-        height: { max: 768 },
+        width: { max: 1920 },
+        height: { max: 1080 },
       },
     });
 
     videoRef.current.srcObject = stream;
 
     const canvas = document.createElement('canvas');
-    canvas.width = 800;
-    canvas.height = 600;
+    canvas.width = screen.width;
+    canvas.height = screen.height;
     const context = canvas.getContext('2d', { willReadFrequently: true });
 
     worker.current = new Worker('worker.js');
@@ -53,7 +53,7 @@ const Teacher = () => {
         canvas.width,
         canvas.height
       );
-      const imageDataURL = canvas.toDataURL('image/webp', 0.8);
+      const imageDataURL = canvas.toDataURL('image/png', 0.8);
       socket.current.volatile.emit('frame', imageDataURL);
     }
   }
