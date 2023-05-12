@@ -4,7 +4,8 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import TextField from "../Components/TextField";
 import Button from "../Components/Button";
-import axios from 'axios'
+import axios from 'axios';
+import BannerRegister from '../assets/Bannerregister.jpeg';
 
 enum UserRole {
     TEACHER = "TEACHER",
@@ -86,57 +87,58 @@ const Register: FC = () => {
     };
 
     return (
-        <body className="items-center justify-center flex h-screen">
-            {isEmailAlreadyTaken && (
-                <p className="text-red-500">Esse e-mail já está cadastrado. Por favor, use outro e-mail.</p>
-            )}
-            <div className="shadow-lg items-center justify-center p-2 bg-purple-400 w-96 rounded">
-                <h1 className="text-center text-3xl text-white font-semibold">Criar Conta</h1>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Nome"
-                        placeholder="Nome"
-                        name="nome"
-                        value={formValues.nome}
-                        onChange={handleInputChange} />
-                    <TextField
-                        label="Email"
-                        placeholder="Email"
-                        name="email"
-                        value={formValues.email}
-                        onChange={handleInputChange} />
-                    <div className="mt-4 mr-10 ml-10 h-auto w-auto flex flex-col">
-                        <label className="font-semibold text-black text-xl">Você é</label>
-                        <select
-                            name="role"
-                            value={formValues.role}
-                            onChange={handleSelectChange}
-                            className="rounded h-10 p-1 bg-gray-200 hover:bg-gray-300"
-                        >
-                            <option value="">Selecione uma opção</option>
-                            <option value={UserRole.TEACHER}>TEACHER</option>
-                            <option value={UserRole.STUDENT}>STUDENT</option>
-                        </select>
-                    </div>
-                    <TextField
-                        label="Senha"
-                        placeholder="Senha"
-                        name="senha"
-                        value={formValues.senha}
-                        type="password"
-                        onChange={handleInputChange} />
-                    <TextField
-                        label="Confirmar Senha"
-                        placeholder="Confirmar Senha"
-                        name="confirmarSenha"
-                        value={formValues.confirmarSenha}
-                        type="password"
-                        onChange={handleInputChange} />
-                    <Button button="Criar Conta" />
-                </form>
-                <p className="text-white text-center font-semibold">Já possui conta? Entre clicando <Link to={"/Login"} className="text-blue-700 hover:text-blue-800">aqui</Link></p>
+        <div className=" bg-gray-800">
+            <div className="items-center justify-center flex h-screen">
+                <div className="shadow-lg items-center justify-center p-2 bg-white w-96 rounded-tl rounded-bl h-4/5">
+                    <h1 className="text-center text-3xl text-gray-800 font-semibold">Coloque seus dados</h1>
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Nome"
+                            placeholder="Nome"
+                            name="nome"
+                            value={formValues.nome}
+                            onChange={handleInputChange} />
+                        <TextField
+                            label="Email"
+                            placeholder="Email"
+                            name="email"
+                            value={formValues.email}
+                            onChange={handleInputChange} />
+                        <div className="mt-4 mr-10 ml-10 h-auto w-auto flex flex-col">
+                            <label className="font-semibold text-black text-xl">Você é</label>
+                            <select
+                                name="role"
+                                value={formValues.role}
+                                onChange={handleSelectChange}
+                                className="rounded h-10 p-1 bg-gray-200 hover:bg-gray-300"
+                            >
+                                <option value={UserRole.TEACHER}>PROFESSOR</option>
+                                <option value={UserRole.STUDENT}>ALUNO</option>
+                            </select>
+                        </div>
+                        <TextField
+                            label="Senha"
+                            placeholder="Senha"
+                            name="senha"
+                            value={formValues.senha}
+                            type="password"
+                            onChange={handleInputChange} />
+                        <TextField
+                            label="Confirmar Senha"
+                            placeholder="Confirmar Senha"
+                            name="confirmarSenha"
+                            value={formValues.confirmarSenha}
+                            type="password"
+                            onChange={handleInputChange} />
+                        <Button button="Criar Conta" />
+                    </form>
+                    <p className="text-gray-800 text-center font-semibold mt-3 text-lg">Já possui conta? Entre clicando <Link to={"/Login"} className="text-blue-700 hover:text-blue-800">aqui</Link></p>
+                </div>
+                <div className="bg-white items-center justify-center h-4/5 w-96 rounded-tr rounded-br">
+                    <img className=" h-auto w-auto mt-20" src={BannerRegister} />
+                </div>
             </div>
-        </body>
+        </div>
     )
 }
 
