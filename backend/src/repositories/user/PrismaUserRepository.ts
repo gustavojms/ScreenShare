@@ -18,7 +18,7 @@ export class PrismaUserRepository implements UserRepository {
     async findByEmail(email: string): Promise<CreateUser | null> {
         const user = await prisma.user.findUnique({
             where: {
-                email: email
+                email: email 
             }
         });
         return user;
@@ -27,7 +27,7 @@ export class PrismaUserRepository implements UserRepository {
     async delete(id: number): Promise<CreateUserData> {
         const user = await prisma.user.delete({
             where: {
-                id: id
+                id: id,
             }
         });
         return user;

@@ -8,8 +8,8 @@ type Props = {
 
 const Button: FC<Props> = ({ button }) => {
     return (
-        <div className="text-center m-6">
-            <button className="bg-gray-200 hover:bg-gray-300 p-3 text-xl rounded" >
+        <div className="text-center mt-4 mr-10 ml-10 h-auto w-auto">
+            <button className="bg-gray-800 text-white hover:bg-black p-3 text-xl rounded w-full" >
                 {button}
             </button>
         </div>
