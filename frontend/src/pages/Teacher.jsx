@@ -10,15 +10,19 @@ import { BsCameraVideo } from 'react-icons/bs';
 import { FaComment } from 'react-icons/fa';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ChatComponent from '../Components/ChatComponent';
+
 
 const Teacher = () => {
   const videoRef = useRef(null);
   const socket = useRef(null);
   let stream = null;
   let worker = useRef(null);
+  const messagesRef = useRef(null);
 
   useEffect(() => {
     socket.current = io("http://localhost:3000");
+
 
     return () => {
       socket.current.off('frame');
@@ -99,7 +103,7 @@ const Teacher = () => {
         
         </div>
       </div>
-      <div className="bg-gray-200 pr-72">chat</div>
+     <ChatComponent/>
     </body>
       </>
     );

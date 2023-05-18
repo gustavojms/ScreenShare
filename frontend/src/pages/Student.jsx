@@ -10,6 +10,7 @@ import { BsCameraVideo } from 'react-icons/bs';
 import { FaComment } from 'react-icons/fa';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ChatComponent from '../Components/ChatComponent';
 
 const Student = () => {
   const [frame, setFrame] = useState('');
@@ -97,7 +98,7 @@ const Student = () => {
           </button>
         </div>
       </div>
-      <div className="bg-gray-200 pr-72">chat</div>
+      <ChatComponent/>
     </body>
     </>
   );

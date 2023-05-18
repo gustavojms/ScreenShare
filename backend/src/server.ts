@@ -33,6 +33,10 @@ io.on('connection', (socket) => {
     socket.broadcast.volatile.emit('frame', frame);
   });
 
+  socket.on('message', (message:any) => {
+    io.emit('message', message);
+  });
+
   socket.on('disconnect', function () {
     let index = ids.indexOf(socket.id);
     ids.splice(index, 1);
