@@ -6,6 +6,7 @@ import TextField from "../Components/TextField";
 import Button from "../Components/Button";
 import axios from 'axios';
 import BannerRegister from '../assets/Bannerregister.jpeg';
+import Home from "./Home";
 
 enum UserRole {
     TEACHER = "TEACHER",
@@ -132,7 +133,7 @@ const Register: FC = () => {
                             onChange={handleInputChange} />
                         <Button button="Criar Conta" />
                     </form>
-                    <p className="text-gray-800 text-center font-semibold mt-3 text-lg">Já possui conta? Entre clicando <Link to={"/Login"} className="text-blue-700 hover:text-blue-800">aqui</Link></p>
+                    <p className="text-gray-800 text-center font-semibold mt-3 text-lg">Já possui conta? Entre clicando <Link to={"/"} className="text-blue-700 hover:text-blue-800">aqui</Link></p>
                 </div>
                 <div className="bg-white items-center justify-center h-4/5 w-96 rounded-tr rounded-br">
                     <img className=" h-auto w-auto mt-20" src={BannerRegister} />
