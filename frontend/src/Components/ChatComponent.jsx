@@ -42,7 +42,7 @@ function ChatComponent() {
       <ul id="messages" ref={messagesRef} className="mb-4 flex-grow overflow-y-auto "></ul>
       <form id="form" onSubmit={handleSubmit} className="flex">
         <input id="input" autoComplete="off" className="flex-grow mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md">Send</button>
+        <button className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold px-4 py-2 rounded-md">Enviar</button>
       </form>
     </div>
   );

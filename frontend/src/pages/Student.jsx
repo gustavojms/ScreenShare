@@ -81,7 +81,7 @@ const Student = () => {
           <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
         </div>
         <div className="flex justify-end mr-14">
-          <button onClick={startReceive} className="bg-blue-500 hover:bg-blue-700 p-3 mb-4 text-white font-semibold rounded-lg">Start Receive</button>
+          <button onClick={startReceive} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 mb-4 text-white font-semibold rounded-lg">Start Receive</button>
         </div>
         <div className="flex justify-center items-center">
           <img id="frame" src={frame} alt="" className='rounded-lg'/>
