@@ -90,10 +90,10 @@ const Teacher = () => {
           <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
         </div>
         <div className="flex justify-end mr-14">
-          <button onClick={startScreenShare} className="bg-gray-200 hover:bg-gray-300 p-2 text-blue-400 font-semibold rounded-lg">Start Sharing</button>
+          <button onClick={startScreenShare} className="bg-blue-500 hover:bg-blue-700 p-3 mb-4 text-white font-semibold rounded-lg">Start Sharing</button>
         </div>
-        <div className="flex justify-center items-center h-screen">
-          <video ref={videoRef} autoPlay>
+        <div className="flex justify-center items-center">
+          <video ref={videoRef} autoPlay className='rounded-lg'>
           </video>
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
