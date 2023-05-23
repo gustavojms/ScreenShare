@@ -18,7 +18,7 @@ const Student = () => {
   const socket = useRef(null);
 
   useEffect(() => {
-    socket.current = io("http://localhost:3000");
+    socket.current = io("http://10.35.4.65:3000");
 
     if (isReceiving) {
       socket.current.on('frame', (receivedFrame) => {

@@ -30,12 +30,9 @@ const Teacher = () => {
   }, []);
 
   async function startScreenShare() {
-    stream = await navigator.mediaDevices.getDisplayMedia({
-      video: {
-        width: { max: 1920 },
-        height: { max: 1080 },
-      },
-    });
+    const WIDTH = 1920
+    const HEIGHT = 1080
+    stream = await navigator.mediaDevices.getDisplayMedia();
 
     videoRef.current.srcObject = stream;
 
@@ -54,10 +51,11 @@ const Teacher = () => {
         videoRef.current,
         0,
         0,
-        canvas.width,
-        canvas.height
+        WIDTH,
+        HEIGHT
+
       );
-      const imageDataURL = canvas.toDataURL('image/png', 0.8);
+      const imageDataURL = canvas.toDataURL('image/webp', 0.8);
       socket.current.volatile.emit('frame', imageDataURL);
     }
   }
@@ -66,6 +64,8 @@ const Teacher = () => {
     videoRef.current.srcObject = null;
     stream.getTracks().forEach((track) => track.stop());
     stream = null;
+    worker.current.terminate();
+    console.log("finished?")
   }
   
     return (

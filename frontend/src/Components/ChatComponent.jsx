@@ -6,7 +6,7 @@ function ChatComponent() {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000");
+    socketRef.current = io("http://10.35.4.65:3000");
 
     socketRef.current.on('message', (msg, id) => {
       const item = document.createElement('li');
