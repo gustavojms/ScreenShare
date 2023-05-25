@@ -23,7 +23,7 @@ const Student = () => {
     if (isReceiving) {
       socket.current.on('frame', (receivedFrame) => {
         setFrame(receivedFrame);
-      });     
+      });
     }
 
     return () => {
@@ -32,11 +32,11 @@ const Student = () => {
     };
   }, [isReceiving]);
 
-  function startReceive () {
+  function startReceive() {
     setIsReceiving(true);
   };
 
-  function stopReceive () {
+  function stopReceive() {
     setIsReceiving(false);
   };
 
@@ -57,49 +57,49 @@ const Student = () => {
     });
   }
 
-    
+
 
   return (
     <>
-    <body className="flex">
-      <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
-        <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-          <AiFillHome size={30}/>
-        </button>
-        <button className="m-2  text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-          <BsCameraVideo size={30}/>
-        </button>
-        <button className="text-3xl m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-          <FontAwesomeIcon icon={faCommentDots}/>
-        </button>
-      </div>
-      <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
-        <div className="flex justify-center items-center m-4">
-          <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-4 rounded">
-            <IoMdArrowDropleft />
+      <body className="flex">
+        <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
+          <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+            <AiFillHome size={30} />
           </button>
-          <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
-        </div>
-        <div className="flex justify-end mr-14">
-          <button onClick={startReceive} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 mb-4 text-white font-semibold rounded-lg">Start Receive</button>
-        </div>
-        <div className="flex justify-center items-center">
-          <img id="frame" src={frame} alt="" className='rounded-lg'/>
-        </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-          <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
-            <FaExpand className="" size={30} />
+          <button className="m-2  text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+            <BsCameraVideo size={30} />
           </button>
-          <button onClick={stopReceive} className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded">
-            <MdCallEnd className="" size={30} />
-          </button>
-          <button onClick={takeScreenShot} className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded">
-            <BiCamera className="" size={30} />
+          <button className="text-3xl m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
+            <FontAwesomeIcon icon={faCommentDots} />
           </button>
         </div>
-      </div>
-      <ChatComponent/>
-    </body>
+        <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
+          <div className="flex justify-center items-center m-4">
+            <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
+              <IoMdArrowDropleft />
+            </button>
+            <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
+            <div className="flex justify-end ml-5">
+              <button onClick={startReceive} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg">Start Receive</button>
+            </div>
+          </div>
+          <div className="flex justify-center items-center m-2">
+            <img id="frame" src={frame} alt="" className='rounded-lg' />
+          </div>
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+            <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
+              <FaExpand className="" size={30} />
+            </button>
+            <button onClick={stopReceive} className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded">
+              <MdCallEnd className="" size={30} />
+            </button>
+            <button onClick={takeScreenShot} className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded">
+              <BiCamera className="" size={30} />
+            </button>
+          </div>
+        </div>
+        <ChatComponent />
+      </body>
     </>
   );
 };
