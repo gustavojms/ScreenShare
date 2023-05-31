@@ -24,8 +24,9 @@ app.use(express.json());
 app.use("/user", userRouter)
 
 io.on('connection', (socket) => {
-  ids.push(socket.id); 
-  io.emit('ids', ids);
+  console.log('user connected id: '+socket.id);
+  // ids.push(socket.id); 
+  // io.emit('ids', ids);
   socket.on('frame', (frame:any) => {
     // ids.forEach(id => {
     //   io.to(id).emit('frame', frame);
@@ -33,10 +34,18 @@ io.on('connection', (socket) => {
     socket.broadcast.volatile.emit('frame', frame);
   });
 
+  socket.on('message', (message:any) => {
+    io.emit('message', message, socket.id);
+  });
+
   socket.on('disconnect', function () {
     let index = ids.indexOf(socket.id);
     ids.splice(index, 1);
-    io.emit('ids', ids);
+    // io.emit('ids', ids);
     console.log('user disconnected id: '+socket.id);
   });
 });
+
+
+//eeeee
+//hhhh
