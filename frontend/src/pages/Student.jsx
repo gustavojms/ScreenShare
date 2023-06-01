@@ -1,56 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
-import '../index.css'
-import { MdCallEnd } from 'react-icons/md'
-import { BiCamera } from 'react-icons/bi'
-import { IoMdArrowDropleft } from 'react-icons/io';
-import { FaExpand } from 'react-icons/fa';
-import { AiFillHome } from 'react-icons/ai';
-import { BsCameraVideo } from 'react-icons/bs';
-import { FaComment } from 'react-icons/fa';
-import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ChatComponent from '../Components/ChatComponent';
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+import "../index.css";
+import { MdCallEnd } from "react-icons/md";
+import { BiCamera } from "react-icons/bi";
+import { IoMdArrowDropleft } from "react-icons/io";
+import { FaExpand } from "react-icons/fa";
+import { AiFillHome } from "react-icons/ai";
+import { BsCameraVideo } from "react-icons/bs";
+import { FaComment } from "react-icons/fa";
+import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ChatComponent from "../Components/ChatComponent";
 
 const Student = () => {
-  const [frame, setFrame] = useState('');
+  const [frame, setFrame] = useState("");
   const [isReceiving, setIsReceiving] = useState(false);
   const socket = useRef(null);
 
-
   function startReceive() {
-    if(!socket.current) {
+    if (!socket.current) {
       socket.current = io("http://localhost:3000");
       setIsReceiving(true);
-
     }
-      socket.current.on('frame', (receivedFrame) => {
-        setFrame(receivedFrame);
-    });
-  };
-
-  function stopReceive() {
-    setIsReceiving(false);
-  };
-
-  const takeScreenShot = () => {
-    const imageElement = document.getElementById('frame');
-    const canvas = document.createElement('canvas');
-    canvas.width = imageElement.naturalWidth;
-    canvas.height = imageElement.naturalHeight;
-    const context = canvas.getContext('2d');
-    context.drawImage(imageElement, 0, 0);
-    canvas.toBlob((blob) => {
-      const screenshotURL = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = screenshotURL;
-      link.download = 'screenshot.png';
-      link.click();
-      URL.revokeObjectURL(screenshotURL);
+    socket.current.on("frame", (receivedFrame) => {
+      setFrame(receivedFrame);
     });
   }
 
+  function stopReceive() {
+    setIsReceiving(false);
+    if (socket.current) {
+      socket.current.off("frame");
+      socket.current.disconnect();
+    }
+    setFrame(null);
+  }
 
+  const takeScreenShot = () => {
+    const imageElement = document.getElementById("frame");
+    const canvas = document.createElement("canvas");
+    canvas.width = imageElement.naturalWidth;
+    canvas.height = imageElement.naturalHeight;
+    const context = canvas.getContext("2d");
+    context.drawImage(imageElement, 0, 0);
+    canvas.toBlob((blob) => {
+      const screenshotURL = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = screenshotURL;
+      link.download = "screenshot.png";
+      link.click();
+      URL.revokeObjectURL(screenshotURL);
+    });
+  };
 
   return (
     <>
@@ -73,20 +74,31 @@ const Student = () => {
             </button>
             <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
             <div className="flex justify-end ml-5">
-              <button onClick={startReceive} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg">Start Receive</button>
+              <button
+                onClick={startReceive}
+                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
+              >
+                Start Receive
+              </button>
             </div>
           </div>
           <div className="flex justify-center items-center m-2">
-            <img id="frame" src={frame} alt="" className='rounded-lg' />
+            <img id="frame" src={frame} alt="" className="rounded-lg" />
           </div>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
             <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
               <FaExpand className="" size={30} />
             </button>
-            <button onClick={stopReceive} className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded">
+            <button
+              onClick={stopReceive}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded"
+            >
               <MdCallEnd className="" size={30} />
             </button>
-            <button onClick={takeScreenShot} className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded">
+            <button
+              onClick={takeScreenShot}
+              className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded"
+            >
               <BiCamera className="" size={30} />
             </button>
           </div>
