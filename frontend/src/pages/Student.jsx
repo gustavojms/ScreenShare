@@ -17,23 +17,16 @@ const Student = () => {
   const [isReceiving, setIsReceiving] = useState(false);
   const socket = useRef(null);
 
-  useEffect(() => {
-    socket.current = io("http://10.35.4.65:3000");
-
-    if (isReceiving) {
-      socket.current.on('frame', (receivedFrame) => {
-        setFrame(receivedFrame);
-      });
-    }
-
-    return () => {
-      socket.current.off('frame');
-      setFrame(null);
-    };
-  }, [isReceiving]);
 
   function startReceive() {
-    setIsReceiving(true);
+    if(!socket.current) {
+      socket.current = io("http://localhost:3000");
+      setIsReceiving(true);
+
+    }
+      socket.current.on('frame', (receivedFrame) => {
+        setFrame(receivedFrame);
+    });
   };
 
   function stopReceive() {

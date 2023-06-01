@@ -20,16 +20,9 @@ const Teacher = () => {
   let worker = useRef(null);
   const messagesRef = useRef(null);
 
-  useEffect(() => {
-    socket.current = io("http://localhost:3000");
-
-
-    return () => {
-      socket.current.off('frame');
-    };
-  }, []);
-
   async function startScreenShare() {
+    socket.current = io("http://localhost:3000");
+    
     const WIDTH = 1920
     const HEIGHT = 1080
     stream = await navigator.mediaDevices.getDisplayMedia();
