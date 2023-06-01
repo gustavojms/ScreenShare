@@ -15,12 +15,16 @@ import ChatComponent from "../Components/ChatComponent";
 const Student = () => {
   const [frame, setFrame] = useState("");
   const [isReceiving, setIsReceiving] = useState(false);
+  const [isButtonHidden, setIsButtonHidden] = useState(false);
   const socket = useRef(null);
 
   function startReceive() {
+    setIsReceiving(true);
+    setIsButtonHidden(true);
     if (!socket.current) {
       socket.current = io("http://localhost:3000");
-      setIsReceiving(true);
+    } else {
+      socket.current.connect();
     }
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
@@ -29,11 +33,15 @@ const Student = () => {
 
   function stopReceive() {
     setIsReceiving(false);
+    setIsButtonHidden(false);
+
     if (socket.current) {
       socket.current.off("frame");
       socket.current.disconnect();
     }
+
     setFrame(null);
+
   }
 
   const takeScreenShot = () => {
@@ -75,7 +83,7 @@ const Student = () => {
             <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
             <div className="flex justify-end ml-5">
               <button
-                onClick={startReceive}
+                onClick={startReceive} hidden={isButtonHidden}
                 className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
               >
                 Start Receive
