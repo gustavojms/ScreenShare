@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import '../index.css'
 import { MdCallEnd } from 'react-icons/md'
@@ -19,8 +19,11 @@ const Teacher = () => {
   let stream = null;
   let worker = useRef(null);
   const messagesRef = useRef(null);
+  const [isButtonHidden, setIsButtonHidden] = useState(false);
+
 
   async function startScreenShare() {
+    setIsButtonHidden(true);
     socket.current = io("http://localhost:3000");
     
     const WIDTH = 1920
@@ -54,6 +57,7 @@ const Teacher = () => {
   }
 
   function stopScreenShare() {
+    setIsButtonHidden(false);
     videoRef.current.srcObject = null;
     stream.getTracks().forEach((track) => track.stop());
     stream = null;
@@ -82,7 +86,7 @@ const Teacher = () => {
             </button>
             <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
             <div className="flex justify-end items-end ml-5">
-              <button onClick={startScreenShare} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg">Start Sharing</button>
+              <button onClick={startScreenShare} hidden={isButtonHidden} className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg">Start Sharing</button>
             </div>
           </div>
           <div className="flex justify-center items-center m-2">
