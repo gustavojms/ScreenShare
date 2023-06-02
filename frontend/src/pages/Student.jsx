@@ -111,7 +111,7 @@ const Student = () => {
             </button>
           </div>
         </div>
-        <ChatComponent />
+        {socket.current && <ChatComponent socket={socket.current} />}
       </body>
     </>
   );
