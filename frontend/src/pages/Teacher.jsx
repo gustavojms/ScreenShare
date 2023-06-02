@@ -14,13 +14,12 @@ import ChatComponent from '../Components/ChatComponent';
 
 
 const Teacher = () => {
+  let worker = useRef(null);
+  let [stream, setStream] = useState(null);
+  const [isButtonHidden, setIsButtonHidden] = useState(false);
   const videoRef = useRef(null);
   const socket = useRef(null);
-  let stream = null;
-  let worker = useRef(null);
   const messagesRef = useRef(null);
-  const [isButtonHidden, setIsButtonHidden] = useState(false);
-
 
   async function startScreenShare() {
     setIsButtonHidden(true);
@@ -28,9 +27,10 @@ const Teacher = () => {
     
     const WIDTH = 1920
     const HEIGHT = 1080
-    stream = await navigator.mediaDevices.getDisplayMedia();
+    const newStream = await navigator.mediaDevices.getDisplayMedia();
 
-    videoRef.current.srcObject = stream;
+    setStream(newStream);
+    videoRef.current.srcObject = newStream;
 
     const canvas = document.createElement('canvas');
     canvas.width = screen.width;
@@ -59,8 +59,10 @@ const Teacher = () => {
   function stopScreenShare() {
     setIsButtonHidden(false);
     videoRef.current.srcObject = null;
-    stream.getTracks().forEach((track) => track.stop());
-    stream = null;
+    if(stream && stream.getTracks) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+    setStream(null);
     worker.current.terminate();
     console.log("finished?")
   }
