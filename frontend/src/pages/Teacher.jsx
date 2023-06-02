@@ -102,7 +102,7 @@ const Teacher = () => {
 
           </div>
         </div>
-        <ChatComponent />
+        {socket.current && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );
