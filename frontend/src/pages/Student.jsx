@@ -16,6 +16,7 @@ const Student = () => {
   const [frame, setFrame] = useState("");
   const [isReceiving, setIsReceiving] = useState(false);
   const [isButtonHidden, setIsButtonHidden] = useState(false);
+  const [roomName, setRoomName] = useState(""); // Adicionado estado para o nome da sala
   const socket = useRef(null);
 
   function startReceive() {
@@ -26,6 +27,8 @@ const Student = () => {
     } else {
       socket.current.connect();
     }
+
+    socket.current.emit("join room", roomName); // Envia o nome da sala para o servidor
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
     });
@@ -41,7 +44,6 @@ const Student = () => {
     }
 
     setFrame(null);
-
   }
 
   const takeScreenShot = () => {
@@ -80,13 +82,21 @@ const Student = () => {
             <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
               <IoMdArrowDropleft />
             </button>
-            <h1 className="font-semibold text-3xl">Introdução a Programação</h1>
             <div className="flex justify-end ml-5">
+              <input
+                className="border border-gray-300 rounded-lg p-1 mr-2 font-semibold text-3xl text-center"
+                placeholder="Digite o nome da sala"
+                type="text"
+                value={roomName}
+                onChange={(e) => setRoomName(e.target.value)}
+              />
               <button
-                onClick={startReceive} hidden={isButtonHidden}
+                onClick={startReceive}
+                disabled={!roomName || isButtonHidden}
                 className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
               >
-                Start Receive
+                {" "}
+                Start Receive{" "}
               </button>
             </div>
           </div>
