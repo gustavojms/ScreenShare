@@ -24,14 +24,17 @@ app.use(express.json());
 app.use("/user", userRouter)
 
 io.on('connection', (socket) => {
+  socket.join("room2");
   console.log('user connected id: '+socket.id);
   // ids.push(socket.id); 
   // io.emit('ids', ids);
   socket.on('frame', (frame:any) => {
+    io.to("room2").emit('frame', frame);
     // ids.forEach(id => {
     //   io.to(id).emit('frame', frame);
     // });
-    socket.broadcast.volatile.emit('frame', frame);
+    //socket.broadcast.volatile.emit('frame', frame);]
+    //socket.to("room").to("room2").emit('frame', frame);
   });
 
   socket.on('message', (message:any) => {
@@ -46,6 +49,3 @@ io.on('connection', (socket) => {
   });
 });
 
-
-//eeeee
-//hhhh
