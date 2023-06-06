@@ -1,12 +1,12 @@
 # ScreenShare
 
-O projeto ScreenShare é uma aplicação que permite o compartilhamento de tela entre diversos computadores usando a tecnologia WebRTC. O foco principal do projeto é a utilização do sistema dentro de salas de aula, onde o professor pode compartilhar sua tela com os alunos de uma forma fácil e rápida. O diferencial da nossa aplicação é a utilização do peer-to-peer, do qual permite uma forma mais eficiente para realizar o compartilhamente de tela, sem a necessidade de usar uma aplicação externa e paga. A aplicação tem a proposta de reduzir o custo de banda e de latência para que a escola possa ter um controle melhor sobre o uso da internet e os alunos possam ter uma melhor experiência durante a aula.
+O projeto ScreenShare é uma aplicação que permite o compartilhamento de tela entre diversos computadores através de websockets. A aplicação foi desenvolvida com o intuito de facilitar o compartilhamento de tela entre professores e alunos durante aulas online, trazendo uma experiência agradável e intuitiva para os usuários. Nosso projeto foi desenvolvido durante a disciplina de Projeto e Desenvolvimento 3.
 
 ## Tecnologias
 
 - [React](https://reactjs.org/)
 - [NodeJS](https://nodejs.org/en/)
-- [WebRTC](https://webrtc.org/)
+- [Socket.io](https://socket.io/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [Express](https://expressjs.com/pt-br/)
 
@@ -16,3 +16,7 @@ O projeto ScreenShare é uma aplicação que permite o compartilhamento de tela 
 - [x] Compartilhamento de arquivos
 - [x] PrintScreen da tela compartilhada
 - [x] Chat em tempo real
+
+## Como executar o projeto
+
+Nosso projeto utiliza docker para facilitar a execução do mesmo. Para executar o projeto, basta executar o comando `docker-compose up` na raiz do projeto. O projeto estará disponível em `localhost:5173`.
