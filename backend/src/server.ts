@@ -17,19 +17,26 @@ const io = new Server(server, {
 });
 
 let ids: string[] = [];
-let activeStreams: string[] = [];
+let activeStreams: string[] = new Proxy([], {
+  set(target, prop, val) {
+    Reflect.set(target, prop, val)
+    io.emit("active", activeStreams);
+    return true;
+  }
+});
 
 app.use(express.json());
-app.use("/user", userRouter);
+app.use("/user", userRouter); 
 
 // TODO: Novo evento de transmit, evento de activeStreams na conexão, no transmit e no disconnect
 
 io.on("connection", (socket) => {
 
   socket.on('create room', (roomName: string, callback: Function) => {
-    // ...
+    // ...  
     if(activeStreams.indexOf(roomName) == -1) {
       activeStreams.push(roomName)
+      io.emit("active", activeStreams);
       callback(true)
       console.log(activeStreams)
     } else {
@@ -39,7 +46,7 @@ io.on("connection", (socket) => {
     console.log("criar sala", roomName)
   })
 
-  io.emit("active", activeStreams);
+  
   //evento transmit
   socket.on("join room", (roomName: string) => {
     socket.join(roomName);

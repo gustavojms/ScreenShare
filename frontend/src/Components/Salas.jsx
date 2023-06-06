@@ -5,8 +5,8 @@ function Salas({ socket }) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('active', (sala) => {
-        setSalasAtivas((salas) => [...salas, sala]);
+      socket.on('active', (salas) => {
+        setSalasAtivas(salas);
       });
     }
 

@@ -16,16 +16,21 @@ import Salas from "../Components/Salas";
 const Teacher = () => {
   let worker = useRef(null);
   let [stream, setStream] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
   const [isButtonHidden, setIsButtonHidden] = useState(false);
   const [roomName, setRoomName] = useState("");
   const videoRef = useRef(null);
   const socket = useRef(null);
   const messagesRef = useRef(null);
 
-  async function startScreenShare() {
+  useEffect(() => {
     if (!socket.current) {
       socket.current = io("http://10.35.4.65:3000");
+      setIsConnected(true);
     }
+  })
+
+  async function startScreenShare() {
     let shouldContinue = undefined
     socket.current.emit('create room', roomName, (ok) => {
       shouldContinue = ok
@@ -114,6 +119,7 @@ const Teacher = () => {
 
               <button
                 onClick={startScreenShare}
+                disabled={!isConnected}
                 hidden={isButtonHidden}
                 className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
               >
