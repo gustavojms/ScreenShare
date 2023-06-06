@@ -18,17 +18,20 @@ const Student = () => {
   const [isButtonHidden, setIsButtonHidden] = useState(false);
   const [roomName, setRoomName] = useState(""); // Adicionado estado para o nome da sala
   const socket = useRef(null);
+  const [activeStreams, setActiveStreams] = useState();
 
   function startReceive() {
     setIsReceiving(true);
     setIsButtonHidden(true);
     if (!socket.current) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io("http://10.35.4.65:3000");
+    
     } else {
       socket.current.connect();
     }
 
     socket.current.emit("join room", roomName); // Envia o nome da sala para o servidor
+    socket.current.on("active", )
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
     });

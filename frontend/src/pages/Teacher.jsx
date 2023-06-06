@@ -11,6 +11,7 @@ import { FaComment } from "react-icons/fa";
 import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatComponent from "../Components/ChatComponent";
+import Salas from "../Components/Salas";
 
 const Teacher = () => {
   let worker = useRef(null);
@@ -22,8 +23,29 @@ const Teacher = () => {
   const messagesRef = useRef(null);
 
   async function startScreenShare() {
+    if (!socket.current) {
+      socket.current = io("http://10.35.4.65:3000");
+    }
+    let shouldContinue = undefined
+    socket.current.emit('create room', roomName, (ok) => {
+      shouldContinue = ok
+    })
+
+    await new Promise(res => {
+      const i = setInterval(() => {
+        if (shouldContinue !== undefined) {
+          clearTimeout(i)
+          res()
+        }
+      }, 1)
+    })
+
+    if (!shouldContinue) {
+      alert('deu merda')
+      return
+    }
+
     setIsButtonHidden(true);
-    socket.current = io("http://localhost:3000");
     socket.current.emit("join room", roomName);
 
     const WIDTH = 1920;
@@ -65,6 +87,7 @@ const Teacher = () => {
     <>
       <div className="flex">
         <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
+          <Salas socket={socket.current}/>
           <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
             <AiFillHome size={30} />
           </button>
@@ -110,7 +133,7 @@ const Teacher = () => {
             </button>
           </div>
         </div>
-        {socket.current && <ChatComponent socket={socket.current} />}
+        {isButtonHidden && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );
