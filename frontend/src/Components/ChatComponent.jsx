@@ -12,6 +12,7 @@ function ChatComponent({ socket }) {
 
       item.className = id === socket.id ? 'justify-end flex bg-blue-500 rounded-lg shadow-md p-4 mb-4 text-white' : 'justify-start flex bg-gray-200 rounded-lg shadow-md p-4 mb-4'; // Add conditional classes for left and right messages
       messagesRef.current.appendChild(item);
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     });
 
     return () => {
