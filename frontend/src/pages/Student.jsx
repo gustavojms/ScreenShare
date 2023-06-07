@@ -11,6 +11,7 @@ import { FaComment } from "react-icons/fa";
 import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatComponent from "../Components/ChatComponent";
+import Salas from "../Components/Salas";
 
 const Student = () => {
   const [frame, setFrame] = useState("");
@@ -19,12 +20,12 @@ const Student = () => {
   const [roomName, setRoomName] = useState(""); // Adicionado estado para o nome da sala
   const socket = useRef(null);
   const [activeStreams, setActiveStreams] = useState();
-
+  
   function startReceive() {
     setIsReceiving(true);
     setIsButtonHidden(true);
     if (!socket.current) {
-      socket.current = io("http://10.35.4.65:3000");
+      socket.current = io("http://localhost:3000");
     } else {
       socket.current.connect();
     }
@@ -32,7 +33,7 @@ const Student = () => {
     socket.current.emit("join room", roomName); // Envia o nome da sala para o servidor
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
-    });
+    });   
   }
 
   function stopReceive() {
@@ -68,6 +69,7 @@ const Student = () => {
     <>
       <body className="flex">
         <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
+          <Salas  socket={socket.current} />
           <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
             <AiFillHome size={30} />
           </button>

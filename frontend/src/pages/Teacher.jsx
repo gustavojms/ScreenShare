@@ -21,11 +21,10 @@ const Teacher = () => {
   const [roomName, setRoomName] = useState("");
   const videoRef = useRef(null);
   const socket = useRef(null);
-  const messagesRef = useRef(null);
 
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://10.35.4.65:3000");
+      socket.current = io("http://localhost:3000");
       setIsConnected(true);
     }
   })

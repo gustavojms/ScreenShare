@@ -17,12 +17,19 @@ function Salas({ socket }) {
     };
   }, [socket]);
 
+  const handleSalaClicada = (sala) => {
+    socket.emit('leave room');
+    socket.emit('join room', sala);
+  };
+
   return (
     <div>
       <h1>Salas ativas</h1>
       <ul>
         {salasAtivas.map((sala, index) => (
-          <li key={index}>{sala}</li>
+          <li key={index} onClick={() => handleSalaClicada(sala)}>
+            {sala}
+          </li>
         ))}
       </ul>
     </div>

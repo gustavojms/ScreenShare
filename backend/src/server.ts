@@ -31,12 +31,11 @@ app.use("/user", userRouter);
 // TODO: Novo evento de transmit, evento de activeStreams na conexão, no transmit e no disconnect
 
 io.on("connection", (socket) => {
-
+  io.emit("active", activeStreams);
   socket.on('create room', (roomName: string, callback: Function) => {
-    // ...  
+    
     if(activeStreams.indexOf(roomName) == -1) {
       activeStreams.push(roomName)
-      io.emit("active", activeStreams);
       callback(true)
       console.log(activeStreams)
     } else {
@@ -49,20 +48,28 @@ io.on("connection", (socket) => {
   
   //evento transmit
   socket.on("join room", (roomName: string) => {
+
     socket.join(roomName);
     console.log("user joined room: " + roomName);
+
     socket.on("frame", (frame: any) => {
       socket.broadcast.to(roomName).emit('frame', frame)
     });
+
     socket.on("message", (message: any) => {
       io.emit("message", message, socket.id);
     });
+
+    socket.on("leave room", () => {
+      socket.leave(roomName);
+    });
   });
+
   
+
   console.log("user connected id: " + socket.id);
   // ids.push(socket.id);
   // io.emit('ids', ids);
-
 
   socket.on("disconnect", function () {
     let index = ids.indexOf(socket.id);
