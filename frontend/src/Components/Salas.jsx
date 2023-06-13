@@ -24,8 +24,8 @@ function Salas({ socket }) {
 
   return (
     <div>
-      <h1>Salas ativas</h1>
-      <ul>
+      <h1 className='text-2xl font-bold mb-4 text-center'>Salas ativas</h1>
+      <ul className='flex flex-col items-center font-medium'>
         {salasAtivas.map((sala, index) => (
           <li key={index} onClick={() => handleSalaClicada(sala)}>
             {sala}
