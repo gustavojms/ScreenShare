@@ -10,6 +10,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ "dev" ]
+    paths:
+      - 'backend/**'
 
 jobs:
   test:
