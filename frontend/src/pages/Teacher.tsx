@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import "../index.css";
 import { MdCallEnd } from "react-icons/md";
+import { FaExpand } from "react-icons/fa";
 import { IoMdArrowDropleft } from "react-icons/io";
 import ChatComponent from "../Components/ChatComponent";
 import Salas from "../Components/Salas";
@@ -13,6 +14,7 @@ const Teacher: React.FC = () => {
   const [isButtonHidden, setIsButtonHidden] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [frame, setFrame] = useState<string>(""); // Adicionado estado para o frame
+  const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
 
@@ -57,6 +59,7 @@ const Teacher: React.FC = () => {
     }
 
     setIsButtonHidden(true);
+    setShowVideo(true);
     socket.current?.emit("join room", roomName);
 
     const WIDTH = 1920;
@@ -84,17 +87,29 @@ const Teacher: React.FC = () => {
   }
 
   function stopScreenShare() {
+    setIsButtonHidden(false);
+    videoRef.current!.srcObject = null;
+    if (stream && stream.getTracks!) {
+      setStream(null);
+      worker.current!.terminate();
+      console.log("finished?");
+    }
+  
+
     if (socket.current) {
       socket.current.off("frame");
+      socket.current.emit("leave room")
+      console.log("saiu")
       socket.current.disconnect();
     }
 
+    setShowVideo(false)
     setFrame("");
   }
 
   return (
     <>
-      <div className="flex">
+      <body className="flex">
         <div className="p-4 flex flex-col">
           <Salas socket={socket.current} />
         </div>
@@ -103,7 +118,7 @@ const Teacher: React.FC = () => {
             <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
               <IoMdArrowDropleft />
             </button>
-            <div className="flex justify-end items-end ml-5">
+            <div className="flex justify-end ml-5">
               <input
                 className="border border-gray-300 rounded-lg p-1 mr-2 font-semibold text-3xl text-center"
                 placeholder="Digite o nome da sala"
@@ -111,23 +126,28 @@ const Teacher: React.FC = () => {
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
               />
-
               <button
                 onClick={startScreenShare}
-                disabled={!isConnected}
-                hidden={isButtonHidden}
                 className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
               >
-                Start Sharing
+                {" "}
+                Transmitir{" "}
               </button>
             </div>
           </div>
           <div className="flex justify-center items-center m-2">
-            {frame && <img id="frame" src={frame} alt="Received Frame" />}
+              {frame && !showVideo && (
+                <img id="frame" src={frame} alt="Received Frame" />
+              )}
 
-            <video ref={videoRef} autoPlay className="rounded-lg"></video>
+              {showVideo && (
+                <video ref={videoRef} autoPlay className="rounded-lg" />
+              )}
           </div>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+            <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
+              <FaExpand className="" size={30} />
+            </button>
             <button
               onClick={stopScreenShare}
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded"
@@ -136,8 +156,8 @@ const Teacher: React.FC = () => {
             </button>
           </div>
         </div>
-        {isButtonHidden && <ChatComponent socket={socket.current} />}
-      </div>
+        {socket.current && <ChatComponent socket={socket.current} />}
+      </body>
     </>
   );
 };

@@ -62,7 +62,12 @@ io.on("connection", (socket) => {
 
     socket.on("leave room", () => {
       socket.leave(roomName);
-    });
+  const index = activeStreams.indexOf(roomName);
+  if (index !== -1) {
+    activeStreams.splice(index, 1);
+    console.log(activeStreams);
+    console.log("removeu")
+      }});
   });
 
   
