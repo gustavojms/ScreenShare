@@ -31,6 +31,7 @@ const Teacher: React.FC = () => {
 
       return () => {
         socket.current?.off("frame");
+        socket.current?.disconnect();
       };
     }
   }, []);
