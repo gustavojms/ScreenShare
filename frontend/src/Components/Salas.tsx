@@ -23,22 +23,28 @@ const Salas: React.FC<SalasProps> = ({ socket }) => {
   }, [socket]);
 
   const handleSalaClicada = (sala: string) => {
-    if(socket) {
+    if (socket) {
       socket.emit('leave room');
       socket.emit('join room', sala);
     }
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <h1 className="text-2xl font-bold mb-4 text-center">Salas ativas</h1>
-      <ul className="flex flex-col items-center font-medium">
-        {salasAtivas.map((sala, index) => (
-          <li key={index} onClick={() => handleSalaClicada(sala)}>
-            {sala}
-          </li>
-        ))}
-      </ul>
+      <div className="max-h-full overflow-y-auto">
+        <ul className="flex flex-col justify-center items-center font-medium text-white">
+          {salasAtivas.map((sala, index) => (
+            <li
+              key={index}
+              onClick={() => handleSalaClicada(sala)}
+              className="m-1 h-12 w-32 bg-gray-900 flex flex-col justify-center items-center text-center rounded-md cursor-pointer hover:bg-gray-700"
+            >
+              {sala}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

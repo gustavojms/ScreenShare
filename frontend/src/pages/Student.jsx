@@ -20,7 +20,7 @@ const Student = () => {
   const [roomName, setRoomName] = useState(""); // Adicionado estado para o nome da sala
   const socket = useRef(null);
   const [activeStreams, setActiveStreams] = useState();
-  
+
   function startReceive() {
     setIsReceiving(true);
     setIsButtonHidden(true);
@@ -33,7 +33,7 @@ const Student = () => {
     socket.current.emit("join room", roomName); // Envia o nome da sala para o servidor
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
-    });   
+    });
   }
 
   function stopReceive() {
@@ -68,17 +68,8 @@ const Student = () => {
   return (
     <>
       <body className="flex">
-        <div className="h-screen pl-32 bg-white flex items-center justify-center flex-col left-1/2 transform -translate-x-1/2">
-          <Salas  socket={socket.current} />
-          <button className=" m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-            <AiFillHome size={30} />
-          </button>
-          <button className="m-2  text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-            <BsCameraVideo size={30} />
-          </button>
-          <button className="text-3xl m-2 text-gray-400 hover:text-blue-500 font-bold py-2 px-4 rounded">
-            <FontAwesomeIcon icon={faCommentDots} />
-          </button>
+        <div className="p-4 flex flex-col">
+          <Salas socket={socket.current} />
         </div>
         <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
           <div className="flex justify-center items-center m-4">
