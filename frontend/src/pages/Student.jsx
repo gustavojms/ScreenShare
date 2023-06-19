@@ -22,6 +22,7 @@ const Student = () => {
   const socket = useRef(null);
   const [activeStreams, setActiveStreams] = useState();
   const [deviceOrientation, setDeviceOrientation] = useState(window.orientation || 0);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     function handleOrientationChange() {
@@ -35,19 +36,33 @@ const Student = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!socket.current) {
+      socket.current = io("http://localhost:3000");
+      setIsConnected(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (socket.current) {
+
+      socket.current.on("frame", (receivedFrame) => {
+        setFrame(receivedFrame);
+      });
+      
+      return () => {
+        console.log("desconectou");
+        socket.current?.off("frame");
+      };
+    }
+  }, []);
+
   function startReceive() {
     setIsReceiving(true);
     setIsButtonHidden(true);
-    if (!socket.current) {
-      socket.current = io("http://192.168.0.113:3000");
-    } else {
-      socket.current.connect();
-    }
-
+   
     socket.current.emit("join room", roomName, "student"); // nome de testes
-    socket.current.on("frame", (receivedFrame) => {
-      setFrame(receivedFrame);
-    });
+    
   }
 
   function stopReceive() {
@@ -89,7 +104,7 @@ const Student = () => {
         </div>
         <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
           <div className="flex justify-center items-center m-4">
-            <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
+            {/* <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
               <IoMdArrowDropleft />
             </button>
             <div className="flex justify-end ml-5">
@@ -108,7 +123,7 @@ const Student = () => {
                 {" "}
                 Start Receive{" "}
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="flex justify-center items-center m-2">
             <img id="frame" src={frame} alt="" className="rounded-lg" />
