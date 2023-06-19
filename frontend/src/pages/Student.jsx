@@ -24,17 +24,17 @@ const Student = () => {
   const [deviceOrientation, setDeviceOrientation] = useState(window.orientation || 0);
   const [isConnected, setIsConnected] = useState(false);
 
-  useEffect(() => {
-    function handleOrientationChange() {
-      setDeviceOrientation(window.orientation || 0);
-    }
+  // useEffect(() => {
+  //   function handleOrientationChange() {
+  //     setDeviceOrientation(window.orientation || 0);
+  //   }
   
-    window.addEventListener("orientationchange", handleOrientationChange);
+  //   window.addEventListener("orientationchange", handleOrientationChange);
   
-    return () => {
-      window.removeEventListener("orientationchange", handleOrientationChange);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("orientationchange", handleOrientationChange);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (!socket.current) {
@@ -57,13 +57,13 @@ const Student = () => {
     }
   }, []);
 
-  function startReceive() {
-    setIsReceiving(true);
-    setIsButtonHidden(true);
+  // function startReceive() {
+  //   setIsReceiving(true);
+  //   setIsButtonHidden(true);
    
-    socket.current.emit("join room", roomName, "student"); // nome de testes
+  //   socket.current.emit("join room", roomName, "student"); // nome de testes
     
-  }
+  // }
 
   function stopReceive() {
     setIsReceiving(false);

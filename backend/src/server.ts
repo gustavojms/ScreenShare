@@ -6,6 +6,7 @@ import { userRouter } from "./routes/routes";
 
 
 const cors = require("cors");
+cors({ credentials: true, origin: true });
 
 const app = express();
 app.use(cors());
@@ -109,7 +110,7 @@ io.on("connection", (socket) => {
     console.log("user joined room: " + roomName);
 
     socket.on("frame", (frame: any) => {
-      socket.broadcast.to(roomName).emit('frame', frame)
+      socket.broadcast.to(roomName).volatile.emit('frame', frame)
     });
 
     socket.on("message", (message: any) => {
@@ -135,7 +136,7 @@ io.on("connection", (socket) => {
  
     console.log("user connected id: " + socket.id);
 
-    socket.on("disconnect", function () {
+    socket.on("disconnect", () => {
       let index = ids.indexOf(socket.id);
       ids.splice(index, 1);
       console.log("user disconnected id: " + socket.id);
