@@ -39,12 +39,12 @@ const Student = () => {
     setIsReceiving(true);
     setIsButtonHidden(true);
     if (!socket.current) {
-      socket.current = io("http://10.0.0.191:3000");
+      socket.current = io("http://192.168.0.113:3000");
     } else {
       socket.current.connect();
     }
 
-    socket.current.emit("join room", roomName); // Envia o nome da sala para o servidor
+    socket.current.emit("join room", roomName, "student"); // nome de testes
     socket.current.on("frame", (receivedFrame) => {
       setFrame(receivedFrame);
     });

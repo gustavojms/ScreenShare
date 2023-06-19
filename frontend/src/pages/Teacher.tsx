@@ -45,7 +45,12 @@ const Teacher: React.FC = () => {
         setFrame(receivedFrame);
       });
 
+      socket.current.on("users", (users: any) => {
+        console.log(users);
+      });
+
       return () => {
+        console.log("desconectou");
         socket.current?.off("frame");
       };
     }
@@ -74,7 +79,7 @@ const Teacher: React.FC = () => {
 
     setIsButtonHidden(true);
     setShowVideo(true);
-    socket.current?.emit("join room", roomName);
+    socket.current?.emit("join room", roomName, "teacher"); // nome de testes
 
     const WIDTH = 1920;
     const HEIGHT = 1080;
