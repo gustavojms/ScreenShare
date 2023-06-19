@@ -25,6 +25,8 @@ let activeStreams: string[] = new Proxy([], {
   }
 });
 
+let roomUsers = new Map();
+
 app.use(express.json());
 app.use("/user", userRouter); 
 
@@ -33,7 +35,8 @@ app.use("/user", userRouter);
 io.on("connection", (socket) => {
   io.emit("active", activeStreams);
   socket.on('create room', (roomName: string, callback: Function) => {
-    
+    roomUsers.set(roomName, []);
+
     if(activeStreams.indexOf(roomName) == -1) {
       activeStreams.push(roomName)
       callback(true)
@@ -48,8 +51,9 @@ io.on("connection", (socket) => {
   
   //evento transmit
   socket.on("join room", (roomName: string) => {
-
+    roomUsers.get(roomName).push(socket.id);
     socket.join(roomName);
+    console.log(roomUsers.get(roomName));
     console.log("user joined room: " + roomName);
 
     socket.on("frame", (frame: any) => {
@@ -62,24 +66,24 @@ io.on("connection", (socket) => {
 
     socket.on("leave room", () => {
       socket.leave(roomName);
-  const index = activeStreams.indexOf(roomName);
-  if (index !== -1) {
-    activeStreams.splice(index, 1);
-    console.log(activeStreams);
-    console.log("removeu")
-      }});
-  });
+      
+      if (socket.id == roomUsers.get(roomName)[0]) {
+        activeStreams.splice(activeStreams.indexOf(roomName), 1);
+        roomUsers.delete(roomName);
+        console.log("deletou sala")
+      }
+
+      console.log(roomUsers.get(roomName));
+    });
 
   
 
-  console.log("user connected id: " + socket.id);
-  // ids.push(socket.id);
-  // io.emit('ids', ids);
+    console.log("user connected id: " + socket.id);
 
-  socket.on("disconnect", function () {
-    let index = ids.indexOf(socket.id);
-    ids.splice(index, 1);
-    // io.emit('ids', ids);
-    console.log("user disconnected id: " + socket.id);
+    socket.on("disconnect", function () {
+      let index = ids.indexOf(socket.id);
+      ids.splice(index, 1);
+      console.log("user disconnected id: " + socket.id);
+    });
   });
 });

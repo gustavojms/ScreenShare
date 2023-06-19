@@ -25,7 +25,7 @@ const Student = () => {
     setIsReceiving(true);
     setIsButtonHidden(true);
     if (!socket.current) {
-      socket.current = io("http://10.35.4.65:3000");
+      socket.current = io("http://localhost:3000");
     } else {
       socket.current.connect();
     }
@@ -41,8 +41,10 @@ const Student = () => {
     setIsButtonHidden(false);
 
     if (socket.current) {
+      socket.current.emit("leave room")
       socket.current.off("frame");
       socket.current.disconnect();
+      
     }
 
     setFrame(null);

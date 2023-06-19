@@ -97,8 +97,8 @@ const Teacher: React.FC = () => {
   
 
     if (socket.current) {
-      socket.current.off("frame");
       socket.current.emit("leave room")
+      socket.current.off("frame");    
       console.log("saiu")
       socket.current.disconnect();
     }
