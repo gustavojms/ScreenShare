@@ -42,16 +42,16 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ socket }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4 flex flex-col h-screen">
+    <div className="sm:max-w-md mx-auto bg-white rounded-lg shadow-md p-4 flex flex-col h-96 sm:h-screen w-48 sm:w-96">
       <h1 className="text-2xl font-bold mb-4 text-center">Chat</h1>
       <ul id="messages" ref={messagesRef} className="mb-4 flex-grow overflow-y-auto"></ul>
       <form id="form" onSubmit={handleSubmit} className="flex">
         <input
           id="input"
           autoComplete="off"
-          className="flex-grow mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          className="flex-grow w-20 mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-        <button className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold px-4 py-2 rounded-md">
+        <button className="w-12 h-10 bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold text-xs sm:px-4 sm:py-2 rounded-md">
           Enviar
         </button>
       </form>

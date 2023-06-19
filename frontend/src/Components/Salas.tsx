@@ -31,14 +31,14 @@ const Salas: React.FC<SalasProps> = ({ socket }) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <h1 className="text-2xl font-bold mb-4 text-center">Salas ativas</h1>
+      <h1 className="text-base sm:text-2xl font-bold text-center">Salas ativas</h1>
       <div className="max-h-full overflow-y-auto">
         <ul className="flex flex-col justify-center items-center font-medium text-white">
           {salasAtivas.map((sala, index) => (
             <li
               key={index}
               onClick={() => handleSalaClicada(sala)}
-              className="m-1 h-12 w-32 bg-gray-900 flex flex-col justify-center items-center text-center rounded-md cursor-pointer hover:bg-gray-700"
+              className="m-1 h-8 w-24 sm:h-12 sm:w-32 bg-gray-900 flex flex-col justify-center items-center text-center rounded-md cursor-pointer hover:bg-gray-700"
             >
               {sala}
             </li>

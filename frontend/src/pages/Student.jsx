@@ -14,6 +14,7 @@ import ChatComponent from "../Components/ChatComponent";
 import Salas from "../Components/Salas";
 import { isMobileOnly } from 'react-device-detect';
 
+
 const Student = () => {
   const [frame, setFrame] = useState("");
   const [isReceiving, setIsReceiving] = useState(false);
@@ -38,7 +39,7 @@ const Student = () => {
 
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io("http://10.0.0.191:3000");
       setIsConnected(true);
     }
   }, []);
@@ -57,13 +58,13 @@ const Student = () => {
     }
   }, []);
 
-  // function startReceive() {
-  //   setIsReceiving(true);
-  //   setIsButtonHidden(true);
+   function startReceive() {
+     setIsReceiving(true);
+     setIsButtonHidden(true);
    
-  //   socket.current.emit("join room", roomName, "student"); // nome de testes
+     socket.current.emit("join room", roomName, "student"); // nome de testes
     
-  // }
+  }
 
   function stopReceive() {
     setIsReceiving(false);
@@ -98,18 +99,18 @@ const Student = () => {
 
   return (
     <>
-  <body className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
-        <div className="p-4 flex flex-col">
+       <div className={`flex ${isMobileOnly ? 'transform rotate-90 ' : ''}`}>
+        <div className="sm:p-4 flex flex-col">
           <Salas socket={socket.current} />
         </div>
-        <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
+        <div className="border-2 border-gray-300 rounded-2xl h-96 sm:h-screen sm:w-screen relative">
           <div className="flex justify-center items-center m-4">
-            {/* <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
+            <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
               <IoMdArrowDropleft />
             </button>
-            <div className="flex justify-end ml-5">
+            <div className="flex justify-end">
               <input
-                className="border border-gray-300 rounded-lg p-1 mr-2 font-semibold text-3xl text-center"
+                className="text-xs sm:text-lg w-48 h-11 sm:h-14 sm:w-full border border-gray-300 rounded-lg p-1 mr-2 font-semibold text-center"
                 placeholder="Digite o nome da sala"
                 type="text"
                 value={roomName}
@@ -118,36 +119,36 @@ const Student = () => {
               <button
                 onClick={startReceive}
                 disabled={!roomName || isButtonHidden}
-                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
+                className="h-12 text-xs sm:h-14 sm:text-lg bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold rounded-lg"
               >
                 {" "}
                 Start Receive{" "}
               </button>
-            </div> */}
+            </div> 
           </div>
           <div className="flex justify-center items-center m-2">
             <img id="frame" src={frame} alt="" className="rounded-lg" />
           </div>
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-            <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
-              <FaExpand className="" size={30} />
+          <div className="flex justify-center items-center">
+            <button className="bg-gray-300 hover:bg-gray-400 font-bold py-1 px-2 sm:py-2 sm:px-4 mr-2 text-white rounded">
+              <FaExpand className="" size={20} />
             </button>
             <button
               onClick={stopReceive}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded"
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded text-base"
             >
-              <MdCallEnd className="" size={30} />
+              <MdCallEnd className="" size={20} />
             </button>
             <button
               onClick={takeScreenShot}
-              className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded"
+              className=" m-2 bg-gray-600 hover:bg-gray-800 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded"
             >
-              <BiCamera className="" size={30} />
+              <BiCamera className="" size={20} />
             </button>
           </div>
         </div>
         {socket.current && <ChatComponent socket={socket.current} />}
-      </body>
+      </div>
     </>
   );
 };

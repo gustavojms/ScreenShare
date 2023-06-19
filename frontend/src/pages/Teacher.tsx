@@ -14,7 +14,7 @@ const Teacher: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isButtonHidden, setIsButtonHidden] = useState(false);
   const [roomName, setRoomName] = useState("");
-  const [frame, setFrame] = useState<string>(""); // Adicionado estado para o frame
+  const [frame, setFrame] = useState<string>("");
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
@@ -24,9 +24,9 @@ const Teacher: React.FC = () => {
     function handleOrientationChange() {
       setDeviceOrientation(window.orientation || 0);
     }
-  
+
     window.addEventListener("orientationchange", handleOrientationChange);
-  
+
     return () => {
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
@@ -109,26 +109,26 @@ const Teacher: React.FC = () => {
     setIsButtonHidden(false);
     videoRef.current!.srcObject = null;
     if (stream && stream.getTracks!) {
+      stream.getTracks().forEach((track) => track.stop());
       setStream(null);
       worker.current!.terminate();
       console.log("finished?");
     }
-  
 
     if (socket.current) {
-      socket.current.emit("leave room")
-      socket.current.off("frame");    
-      console.log("saiu")
+      socket.current.emit("leave room");
+      socket.current.off("frame");
+      console.log("saiu");
       socket.current.disconnect();
     }
 
-    setShowVideo(false)
+    setShowVideo(false);
     setFrame("");
   }
 
   return (
     <>
-     <body className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
+      <div className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
         <div className="p-4 flex flex-col">
           <Salas socket={socket.current} />
         </div>
@@ -139,7 +139,9 @@ const Teacher: React.FC = () => {
             </button>
             <div className="flex justify-end ml-5">
               <input
-                className="border border-gray-300 rounded-lg p-1 mr-2 font-semibold text-3xl text-center"
+                className={`border border-gray-300 rounded-lg p-1 mr-2 font-semibold ${
+                  isMobileOnly ? "text-2xl" : "text-3xl"
+                } text-center`}
                 placeholder="Digite o nome da sala"
                 type="text"
                 value={roomName}
@@ -149,19 +151,14 @@ const Teacher: React.FC = () => {
                 onClick={startScreenShare}
                 className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
               >
-                {" "}
-                Transmitir{" "}
+                Transmitir
               </button>
             </div>
           </div>
           <div className="flex justify-center items-center m-2">
-              {frame && !showVideo && (
-                <img id="frame" src={frame} alt="Received Frame" />
-              )}
+            {frame && !showVideo && <img id="frame" src={frame} alt="Received Frame" />}
 
-              {showVideo && (
-                <video ref={videoRef} autoPlay className="rounded-lg" />
-              )}
+            {showVideo && <video ref={videoRef} autoPlay className="rounded-lg" />}
           </div>
           <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
             <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
@@ -176,7 +173,7 @@ const Teacher: React.FC = () => {
           </div>
         </div>
         {socket.current && <ChatComponent socket={socket.current} />}
-      </body>
+      </div>
     </>
   );
 };
