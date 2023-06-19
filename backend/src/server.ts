@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("message", (message: any) => {
-      io.to(roomName).emit("message", message);
+      io.to(roomName).emit("message", message, user.id);
     });
 
     socket.on("leave room", () => {
