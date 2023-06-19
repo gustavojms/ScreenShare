@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rotate {
+    transform: rotate(90deg);
+    transform-origin: top left;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .orientation-0 {
+    /* Orientação retrato (vertical) */
+    transform: none;
+  }
+  
+  .orientation-90 {
+    /* Orientação paisagem (horizontal) */
+    transform: rotate(90deg);
+    transform-origin: top left;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  .orientation--90 {
+    /* Orientação paisagem invertida (horizontal invertida) */
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  .orientation-180 {
+    /* Orientação retrato invertida (vertical invertida) */
+    transform: rotate(180deg);
+  }
+  

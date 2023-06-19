@@ -12,6 +12,7 @@ import { faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatComponent from "../Components/ChatComponent";
 import Salas from "../Components/Salas";
+import { isMobileOnly } from 'react-device-detect';
 
 const Student = () => {
   const [frame, setFrame] = useState("");
@@ -20,12 +21,25 @@ const Student = () => {
   const [roomName, setRoomName] = useState(""); // Adicionado estado para o nome da sala
   const socket = useRef(null);
   const [activeStreams, setActiveStreams] = useState();
+  const [deviceOrientation, setDeviceOrientation] = useState(window.orientation || 0);
+
+  useEffect(() => {
+    function handleOrientationChange() {
+      setDeviceOrientation(window.orientation || 0);
+    }
+  
+    window.addEventListener("orientationchange", handleOrientationChange);
+  
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, []);
 
   function startReceive() {
     setIsReceiving(true);
     setIsButtonHidden(true);
     if (!socket.current) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io("http://10.0.0.191:3000");
     } else {
       socket.current.connect();
     }
@@ -69,7 +83,7 @@ const Student = () => {
 
   return (
     <>
-      <body className="flex">
+  <body className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
         <div className="p-4 flex flex-col">
           <Salas socket={socket.current} />
         </div>

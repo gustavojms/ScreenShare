@@ -6,6 +6,7 @@ import { FaExpand } from "react-icons/fa";
 import { IoMdArrowDropleft } from "react-icons/io";
 import ChatComponent from "../Components/ChatComponent";
 import Salas from "../Components/Salas";
+import { isMobileOnly } from "react-device-detect";
 
 const Teacher: React.FC = () => {
   const worker = useRef<Worker | null>(null);
@@ -17,6 +18,19 @@ const Teacher: React.FC = () => {
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
+  const [deviceOrientation, setDeviceOrientation] = useState<number>(window.orientation || 0);
+
+  useEffect(() => {
+    function handleOrientationChange() {
+      setDeviceOrientation(window.orientation || 0);
+    }
+  
+    window.addEventListener("orientationchange", handleOrientationChange);
+  
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!socket.current) {
@@ -109,7 +123,7 @@ const Teacher: React.FC = () => {
 
   return (
     <>
-      <body className="flex">
+     <body className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
         <div className="p-4 flex flex-col">
           <Salas socket={socket.current} />
         </div>
