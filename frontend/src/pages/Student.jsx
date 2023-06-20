@@ -39,7 +39,7 @@ const Student = () => {
 
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://10.0.0.191:3000");
+      socket.current = io("http://localhost:3000");
       setIsConnected(true);
     }
   }, []);
