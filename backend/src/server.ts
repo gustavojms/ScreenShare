@@ -1,12 +1,8 @@
 import express from "express";
 import { Server } from "socket.io";
 import { userRouter } from "./routes/routes";
+import cors from 'cors';
 
-
-
-
-const cors = require("cors");
-cors({ credentials: true, origin: true });
 
 const app = express();
 app.use(cors());
@@ -29,11 +25,6 @@ class User {
     this.id = id;
     this.name = name;
   }
-
-  // se a gente for usar parametro privado...
-  // get getId() {
-  //   return this.id;
-  // }
 }
 
 let ids: string[] = [];
@@ -49,27 +40,11 @@ let activeStreams: string[] = new Proxy([], {
     io.emit("active", activeStreams);
     return true;
   }
-});
+}); 
 
 
-
-// se não quiser usar o User, coloca any mesmo que funciona
 let roomUsers = new Map<string, User[]>();
 
-
-// não queria ficar repetindo emit, mas não consegui fazer funcionar com proxy
-// let roomUsers = new Proxy(new Map<string, User[]>(), {
-//   set(target, prop, val) {  
-//     Reflect.set(target, prop, val)
-//     io.emit("room users", roomUsers);
-//     return true;
-//   },
-//   deleteProperty(target, prop) {
-//     Reflect.deleteProperty(target, prop)
-//     io.emit("room users", roomUsers);
-//     return true;
-//   }
-// });
 
   
 
@@ -99,7 +74,12 @@ io.on("connection", (socket) => {
   
   //evento transmit
   socket.on("join room", (roomName: string, name:string) => {
-    const users = roomUsers.get(roomName) || [];
+    let users = roomUsers.get(roomName);
+
+    if (!users) {
+      users = [];
+      roomUsers.set(roomName, users);
+    }
     const user = new User(socket.id, name);
     users.push(user);
     socket.join(roomName);
@@ -120,24 +100,36 @@ io.on("connection", (socket) => {
     socket.on("leave room", () => {
       const users = roomUsers.get(roomName) || [];
       socket.leave(roomName);
-      
-      if (socket.id == users[0].id) {
+    
+      if (users.length > 0) {
+        if (socket.id === users[0].id) {
+          activeStreams.splice(activeStreams.indexOf(roomName), 1);
+          roomUsers.delete(roomName);
+          console.log("deletou sala");
+        } else {
+          const userIndex = users.findIndex((user) => user.id === socket.id);
+          if (userIndex !== -1) {
+            users.splice(userIndex, 1);
+          }
+        }
+        
+      } else {
         activeStreams.splice(activeStreams.indexOf(roomName), 1);
         roomUsers.delete(roomName);
-        console.log("deletou sala")
-      }else {
-        const index = users.indexOf(user);
-        users.splice(index, 1);
+        console.log("deletou sala");
       }
 
       io.to(roomName).emit("users", users);
       console.log(roomUsers.get(roomName));
     });
+
+
+  
  
     console.log("user connected id: " + socket.id);
 
     socket.on("disconnect", () => {
-      let index = ids.indexOf(socket.id);
+      let index = ids.findIndex((id) => id == socket.id);
       ids.splice(index, 1);
       console.log("user disconnected id: " + socket.id);
     });

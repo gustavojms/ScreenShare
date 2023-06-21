@@ -18,6 +18,8 @@ const Teacher: React.FC = () => {
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [isReceiving, setIsReceiving] = useState(false)
   const [deviceOrientation, setDeviceOrientation] = useState<number>(window.orientation || 0);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ const Teacher: React.FC = () => {
 
   async function startScreenShare() {
     let shouldContinue: boolean | undefined;
-
+    socket.current?.emit("leave room")
     socket.current?.emit("create room", roomName, (ok: boolean) => {
       shouldContinue = ok;
     });
@@ -79,7 +81,8 @@ const Teacher: React.FC = () => {
 
     setIsButtonHidden(true);
     setShowVideo(true);
-    socket.current?.emit("join room", roomName, "teacher"); // nome de testes
+    setIsSending(true);
+    socket.current!.emit("join room", roomName, "teacher"); // nome de testes
 
     const WIDTH = 1920;
     const HEIGHT = 1080;
@@ -117,13 +120,14 @@ const Teacher: React.FC = () => {
 
     if (socket.current) {
       socket.current.emit("leave room");
-      socket.current.off("frame");
+      // gambiarra pra atualizar o componente (estava dando erro quando saia da sala e entrava em outra ou na mesma)
+      // window.location.reload();
       console.log("saiu");
-      socket.current.disconnect();
     }
 
     setShowVideo(false);
     setFrame("");
+    setIsSending(false);
   }
 
   return (
@@ -172,7 +176,7 @@ const Teacher: React.FC = () => {
             </button>
           </div>
         </div>
-        {socket.current && <ChatComponent socket={socket.current} />}
+        {isSending  && frame!=null && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );

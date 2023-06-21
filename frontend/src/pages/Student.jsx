@@ -15,7 +15,7 @@ import Salas from "../Components/Salas";
 import { isMobileOnly } from 'react-device-detect';
 
 
-const Student = () => {
+const Student = (name) => {
   const [frame, setFrame] = useState("");
   const [isReceiving, setIsReceiving] = useState(false);
   const [isButtonHidden, setIsButtonHidden] = useState(false);
@@ -39,7 +39,7 @@ const Student = () => {
 
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io("http://192.168.0.113:3000");
       setIsConnected(true);
     }
   }, []);
@@ -72,8 +72,7 @@ const Student = () => {
 
     if (socket.current) {
       socket.current.emit("leave room")
-      socket.current.off("frame");
-      socket.current.disconnect();
+      // socket.current.disconnect();
       
     }
 
@@ -147,7 +146,7 @@ const Student = () => {
             </button>
           </div>
         </div>
-        {socket.current && <ChatComponent socket={socket.current} />}
+        {isReceiving && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );
