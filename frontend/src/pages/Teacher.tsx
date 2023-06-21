@@ -110,7 +110,10 @@ const Teacher: React.FC = () => {
 
   function stopScreenShare() {
     setIsButtonHidden(false);
-    videoRef.current!.srcObject = null;
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+
     if (stream && stream.getTracks!) {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
@@ -176,7 +179,7 @@ const Teacher: React.FC = () => {
             </button>
           </div>
         </div>
-        {isSending  && frame!=null && <ChatComponent socket={socket.current} />}
+        {isSending  || frame!='' && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );
