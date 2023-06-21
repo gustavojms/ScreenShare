@@ -177,7 +177,7 @@ const Teacher: React.FC = () => {
             </button>
           </div>
         </div>
-        {isSending  || frame!='' && <ChatComponent socket={socket.current} />}
+        {(isSending  || frame!='') && <ChatComponent socket={socket.current} />}
       </div>
     </>
   );
