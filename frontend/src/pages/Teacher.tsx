@@ -19,8 +19,8 @@ const Teacher: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
   const [isSending, setIsSending] = useState(false);
-  const [isReceiving, setIsReceiving] = useState(false)
   const [deviceOrientation, setDeviceOrientation] = useState<number>(window.orientation || 0);
+  const name = localStorage.getItem("name");
 
   useEffect(() => {
     function handleOrientationChange() {
@@ -82,7 +82,7 @@ const Teacher: React.FC = () => {
     setIsButtonHidden(true);
     setShowVideo(true);
     setIsSending(true);
-    socket.current!.emit("join room", roomName, "teacher"); // nome de testes
+    socket.current!.emit("join room", roomName, name);
 
     const WIDTH = 1920;
     const HEIGHT = 1080;
@@ -123,8 +123,6 @@ const Teacher: React.FC = () => {
 
     if (socket.current) {
       socket.current.emit("leave room");
-      // gambiarra pra atualizar o componente (estava dando erro quando saia da sala e entrava em outra ou na mesma)
-      // window.location.reload();
       console.log("saiu");
     }
 
