@@ -134,7 +134,7 @@ const Teacher: React.FC = () => {
   return (
     <>
       <div className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
-        <div className="p-4 flex flex-col">
+        <div className="flex flex-col">
           <Salas socket={socket.current} />
         </div>
         <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
