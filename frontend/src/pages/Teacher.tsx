@@ -144,8 +144,8 @@ const Teacher: React.FC = () => {
             </button>
             <div className="flex justify-end ml-5">
               <input
-                className={`border border-gray-300 rounded-lg p-1 mr-2 font-semibold ${
-                  isMobileOnly ? "text-2xl" : "text-3xl"
+                className={`border border-gray-300 rounded-lg px-12 mr-2 font-semibold ${
+                  isMobileOnly ? "text-lg" : "text-lg"
                 } text-center`}
                 placeholder="Digite o nome da sala"
                 type="text"
@@ -154,7 +154,7 @@ const Teacher: React.FC = () => {
               />
               <button
                 onClick={startScreenShare}
-                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-3 text-white font-semibold rounded-lg"
+                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-2 px-6 text-white font-semibold rounded-lg"
               >
                 Transmitir
               </button>
