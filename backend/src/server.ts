@@ -2,10 +2,16 @@ import express from "express";
 import { Server } from "socket.io";
 import { userRouter } from "./routes/routes";
 import cors from 'cors';
+import path from "path";
 
 
 const app = express();
+
+// Para rodar o build do frontend, descomentar a linha abaixo, e copiar o worker.js para a pasta dist e acessar localhost:3000
+// app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
 app.use(cors());
+
 const server = app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

@@ -1,3 +1,3 @@
 setInterval(function() {
-    self.postMessage('');
-}, 200);
+  self.postMessage('');
+}, 200); 
