@@ -20,7 +20,7 @@ const Teacher: React.FC = () => {
   const socket = useRef<Socket | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [deviceOrientation, setDeviceOrientation] = useState<number>(window.orientation || 0);
-  const name = localStorage.getItem("name");
+  const name = sessionStorage.getItem("name") || "";
 
   useEffect(() => {
     function handleOrientationChange() {

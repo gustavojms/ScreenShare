@@ -25,7 +25,7 @@ const Salas: React.FC<SalasProps> = ({ socket }) => {
   const handleSalaClicada = (sala: string) => {
     if (socket) {
       socket.emit('leave room');
-      socket.emit('join room', sala);
+      socket.emit('join room', sala, sessionStorage.getItem('name') || '');
     }
   };
 

@@ -9,7 +9,7 @@ export default function Main() {
     const handleSubmit = (event:any) => {
         event.preventDefault();
         const name = event.target.elements.name.value;
-        localStorage.setItem("name", name);
+        sessionStorage.setItem("name", name);
         navigate("/Teacher");
     };
 
