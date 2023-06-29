@@ -38,7 +38,7 @@ O projeto ScreenShare é uma aplicação que permite o compartilhamento de tela 
 
 4. Alternativamente, você pode rodar o projeto com o docker em um processo em segundo plano:
         
-        ```docker-compose up -d```
+    ```docker-compose up -d```
 
 ## Como executar o projeto sem docker
 
