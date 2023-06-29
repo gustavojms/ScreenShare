@@ -69,7 +69,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ socket }) => {
           autoComplete="off"
           className="flex-grow w-20 mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-        <button className="w-12 h-10 bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold text-xs sm:px-4 sm:py-2 rounded-md">
+        <button className="w-12 h-10 bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold text-xs rounded-md">
           Enviar
         </button>
       </form>

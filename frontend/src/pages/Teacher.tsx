@@ -131,6 +131,8 @@ const Teacher: React.FC = () => {
     setIsSending(false);
   }
 
+  
+
   return (
     <>
       <div className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
