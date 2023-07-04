@@ -11,16 +11,34 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ socket }) => {
 
   useEffect(() => {
     if(socket)
-    socket.on('message', (msg: string, id: string) => {
-      const item = document.createElement('li');
-      item.textContent = msg;
-      console.log(id);
+    socket.on('message', (msg: string, id: string, name: string) => {
+      const chatMessage = document.createElement('div');
+      const userName = document.createElement('span');
+      const userMessage = document.createElement('span');
 
-      item.className =
+      userName.textContent = name;
+      userMessage.textContent = msg;
+
+      chatMessage.appendChild(userName)
+      chatMessage.appendChild(userMessage)
+      // userMessage.textContent = `${name}: ${msg}`
+      console.log(name);
+
+      chatMessage.className = 'flex flex-col'
+      userName.className = 
         id === socket.id
-          ? 'justify-end flex bg-blue-500 rounded-lg shadow-md p-4 mb-4 text-white'
-          : 'justify-start flex bg-gray-200 rounded-lg shadow-md p-4 mb-4'; // Add conditional classes for left and right messages
-      messagesRef.current?.appendChild(item);
+        ? 'w-full flex justify-end text-sm text-gray-500 capitalize'
+        : 'w-full flex justify-start text-sm text-gray-500 capitalize'
+      userMessage.className = 
+        id === socket.id
+          ? 'justify-end flex bg-blue-500 rounded-lg p-2 text-white'
+          : 'justify-start flex bg-gray-200 rounded-lg p-2';
+
+      // chatMessage.className =
+      //   id === socket.id
+      //     ? 'justify-end flex bg-blue-500 rounded-lg shadow-md p-2 mb-4 text-white'
+      //     : 'justify-start flex bg-gray-200 rounded-lg shadow-md p-2 mb-4'; // Add conditional classes for left and right messages
+      messagesRef.current?.appendChild(chatMessage);
       messagesRef.current?.scrollTo(0, messagesRef.current.scrollHeight);
     });
 
@@ -51,7 +69,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ socket }) => {
           autoComplete="off"
           className="flex-grow w-20 mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-        <button className="h-10 bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold text-xs sm:px-4 sm:py-2 rounded-md">
+        <button className="w-12 h-10 bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out text-white font-semibold text-xs rounded-md">
           Enviar
         </button>
       </form>

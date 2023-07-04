@@ -2,10 +2,16 @@ import express from "express";
 import { Server } from "socket.io";
 import { userRouter } from "./routes/routes";
 import cors from 'cors';
+import path from "path";
 
 
 const app = express();
+
+// Para rodar o build do frontend, descomentar a linha abaixo, e copiar o worker.js para a pasta dist e acessar localhost:3000
+//app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
 app.use(cors());
+
 const server = app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
@@ -42,11 +48,18 @@ let activeStreams: string[] = new Proxy([], {
   }
 }); 
 
-
 let roomUsers = new Map<string, User[]>();
 
+function getRoomNameFromSocket(socket: any) {
+  const room = Array.from(socket.rooms.values()).find((room) => room !== socket.id);
+  return room || "";
+}
 
-  
+function getUserFromSocket(socket: any, roomName: any) {
+  const users = roomUsers.get(roomName);
+  const user = users!.find((user) => user.id === socket.id);
+  return user || null;
+}
 
 app.use(express.json());
 app.use("/user", userRouter); 
@@ -70,7 +83,6 @@ io.on("connection", (socket) => {
     }
     console.log("criar sala", roomName)
   })
-
   
   //evento transmit
   socket.on("join room", (roomName: string, name:string) => {
@@ -93,13 +105,10 @@ io.on("connection", (socket) => {
       socket.broadcast.to(roomName).volatile.emit('frame', frame)
     });
 
-    socket.on("message", (message: any) => {
-      io.to(roomName).emit("message", message, user.id);
-    });
-
     socket.on("leave room", () => {
       const users = roomUsers.get(roomName) || [];
       socket.leave(roomName);
+      console.log("saiu")
     
       if (users.length > 0) {
         if (socket.id === users[0].id) {
@@ -123,9 +132,6 @@ io.on("connection", (socket) => {
       console.log(roomUsers.get(roomName));
     });
 
-
-  
- 
     console.log("user connected id: " + socket.id);
 
     socket.on("disconnect", () => {
@@ -133,5 +139,11 @@ io.on("connection", (socket) => {
       ids.splice(index, 1);
       console.log("user disconnected id: " + socket.id);
     });
+  });
+
+  socket.on("message", (message: any) => {
+    const roomName: any = getRoomNameFromSocket(socket);
+    const user = getUserFromSocket(socket, roomName);
+    io.to(roomName).emit("message", message, user!.id, user!.name);
   });
 });
