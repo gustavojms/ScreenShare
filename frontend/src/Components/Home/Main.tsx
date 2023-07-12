@@ -17,7 +17,9 @@ export default function Main() {
     return (
         <main>
             <div className="sm:flex"> 
+           
                 <div className="sm:w-1/2 sm:h-1/2 sm:inline-block w-fit h-fit">
+                    
                     <img src={imghome} alt="Umas coisas coloridas" />
                 </div>
                 <div className="max-w-2xl bg-white py-10 px-5 m-auto w-full sm:mt-48">

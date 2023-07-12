@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import "../index.css";
-import { MdCallEnd } from "react-icons/md";
-import { FaExpand } from "react-icons/fa";
-import { IoMdArrowDropleft } from "react-icons/io";
 import ChatComponent from "../Components/ChatComponent";
 import Salas from "../Components/Salas";
 import { isMobileOnly } from "react-device-detect";
+import { CameraIcon, PhoneXMarkIcon, PlusCircleIcon, TvIcon } from '@heroicons/react/24/outline'
+import lookingForImg from "../assets/../assets/Business team looking for new people.png";
 
 const Teacher: React.FC = () => {
   const worker = useRef<Worker | null>(null);
@@ -14,7 +13,7 @@ const Teacher: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isButtonHidden, setIsButtonHidden] = useState(false);
   const [roomName, setRoomName] = useState("");
-  const [frame, setFrame] = useState<string>("");
+  const [frame, setFrame] = useState<string>(lookingForImg);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const socket = useRef<Socket | null>(null);
@@ -36,7 +35,7 @@ const Teacher: React.FC = () => {
 
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://localhost:3000");
+      socket.current = io("http://192.168.0.113:3000");
       setIsConnected(true);
     }
   }, []);
@@ -127,26 +126,43 @@ const Teacher: React.FC = () => {
     }
 
     setShowVideo(false);
-    setFrame("");
+    setFrame(lookingForImg);
     setIsSending(false);
+    setRoomName("");
   }
+
+  const takeScreenShot = () => {
+    const imageElement = document.getElementById("frame") as HTMLImageElement;
+    const canvas = document.createElement("canvas");
+    canvas.width = imageElement.naturalWidth;
+    canvas.height = imageElement.naturalHeight;
+    const context = canvas.getContext("2d");
+    context?.drawImage(imageElement, 0, 0);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const screenshotURL = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = screenshotURL;
+      link.download = "screenshot.png";
+      link.click();
+      URL.revokeObjectURL(screenshotURL);
+    });
+  };
+  
 
   
 
   return (
-    <>
-      <div className={`flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
+    <div className="sm:overflow-hidden sm:max-h-screen">
+      <div className={`bg-slate-300 flex ${isMobileOnly ? `orientation-${deviceOrientation}` : ""}`}>
         <div className="flex flex-col">
-          <Salas socket={socket.current} />
+          <Salas socket={socket.current}/>
         </div>
-        <div className="border-2 border-gray-300 rounded-2xl h-screen w-screen relative">
+        <div className="border-2 border-gray-300 h-screen w-screen  rounded bg-gray-100 relative">
           <div className="flex justify-center items-center m-4">
-            <button className="bg-slate-300 p-2 text-gray-500 hover:bg-gray-400 mr-5 rounded">
-              <IoMdArrowDropleft />
-            </button>
             <div className="flex justify-end ml-5">
               <input
-                className={`border border-gray-300 rounded-lg px-12 mr-2 font-semibold ${
+                className={`border border-gray-300 rounded-lg px-12 mr-2 font-semibold focus:outline-none focus:border-blue-500 ${
                   isMobileOnly ? "text-lg" : "text-lg"
                 } text-center`}
                 placeholder="Digite o nome da sala"
@@ -154,34 +170,44 @@ const Teacher: React.FC = () => {
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
               />
-              <button
-                onClick={startScreenShare}
-                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-300 ease-in-out p-2 px-6 text-white font-semibold rounded-lg"
-              >
-                Transmitir
-              </button>
-            </div>
+              <button className="inline-flex bg-blue-500 w-52 rounded" onClick={startScreenShare}>
+                <span                
+                  className="p-2"
+                >
+               <PlusCircleIcon className="h-10 w-10 text-white"/>               
+              </span> 
+              <p className="sm:text-2xl mt-3 pl-1 text-white font-bold justify-center">Transmitir</p>
+            </button>
+              </div>            
           </div>
           <div className="flex justify-center items-center m-2">
-            {frame && !showVideo && <img id="frame" src={frame} alt="Received Frame" />}
+            {frame && !showVideo && <img id="frame" src={frame} alt="Received Frame"  className="mt-5"/>}
 
             {showVideo && <video ref={videoRef} autoPlay className="rounded-lg" />}
-          </div>
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-            <button className="bg-gray-300 hover:bg-gray-400 font-bold py-4 px-6 mr-2 text-white rounded">
-              <FaExpand className="" size={30} />
-            </button>
-            <button
-              onClick={stopScreenShare}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded"
-            >
-              <MdCallEnd className="" size={30} />
-            </button>
-          </div>
+          </div> 
+          {(isSending || frame!=lookingForImg) ? 
+          <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 transform bg-transparent">
+            <div className="flex">
+              <div className="">
+              <button className="m-2 cursor-pointer content-center rounded-lg bg-blue-500 p-3 text-white" onClick={takeScreenShot}>
+                <CameraIcon className="h-8 w-8 bg-blue-500" />
+              </button>
+            </div>
+            <div className="">
+              <button onClick={stopScreenShare} className="m-2 cursor-pointer content-center rounded-lg bg-red-500 p-3 text-white">
+                <PhoneXMarkIcon className="h-8 w-8 bg-red-500" />
+              </button>
+            </div>
+            </div>
+          </div> : <div className="text-center"><h1 className="text-lg font-bold">Entre em uma sala ou comece a compartilhar a tela!</h1></div>
+          }
         </div>
-        {(isSending  || frame!='') && <ChatComponent socket={socket.current} />}
+        <div>
+          {(isSending  || frame!=lookingForImg) && <ChatComponent socket={socket.current} />}
+        </div>        
       </div>
-    </>
+      </div>
+    
   );
 };
 
